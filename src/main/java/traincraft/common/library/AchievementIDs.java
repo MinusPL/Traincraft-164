@@ -24,9 +24,9 @@ public enum AchievementIDs {
 	builder(new int[] { ItemIDs.minecartBuilder.item.itemID }),
 	jukebox(new int[] { ItemIDs.minecartJukeBoxCart.item.itemID }),
 
-	openHearth(new int[] { BlockIDs.openFurnaceIdle.block.blockID }),
-	trainWB(new int[] { BlockIDs.trainWorkbench.block.blockID }),
-	assemblyTable(new int[] { BlockIDs.assemblyTableI.block.blockID, BlockIDs.assemblyTableII.block.blockID, BlockIDs.assemblyTableIII.block.blockID }),
+	openHearth(new int[] { BlockIDs.openFurnaceIdle.TCBlocksList.blockID }),
+	trainWB(new int[] { BlockIDs.trainWorkbench.TCBlocksList.blockID }),
+	assemblyTable(new int[] { BlockIDs.assemblyTableI.TCBlocksList.blockID, BlockIDs.assemblyTableII.TCBlocksList.blockID, BlockIDs.assemblyTableIII.TCBlocksList.blockID }),
 	engineer(new int[] { ItemIDs.overalls.item.itemID, ItemIDs.hat.item.itemID, ItemIDs.jacket.item.itemID }),
 	woodenParts(new int[] { ItemIDs.woodenBogie.item.itemID, ItemIDs.woodenCab.item.itemID, ItemIDs.woodenFrame.item.itemID, ItemIDs.seats.item.itemID }),
 	ironParts(new int[] { ItemIDs.ironBogie.item.itemID, ItemIDs.ironBoiler.item.itemID, ItemIDs.ironCab.item.itemID, ItemIDs.ironChimney.item.itemID, ItemIDs.ironFirebox.item.itemID, ItemIDs.ironFrame.item.itemID }),
@@ -41,7 +41,7 @@ public enum AchievementIDs {
 	mail(new int[] { ItemIDs.minecartMailWagon_DB.item.itemID }),
 	caboose(new int[] { ItemIDs.minecartCaboose.item.itemID, ItemIDs.minecartCaboose3.item.itemID, ItemIDs.minecartCabooseWork.item.itemID }),
 	stockCar(new int[] { ItemIDs.minecartStockCar.item.itemID }),
-	distilationTower(new int[] { BlockIDs.distilIdle.block.blockID });
+	distilationTower(new int[] { BlockIDs.distilIdle.TCBlocksList.blockID });
 
 	public Achievement achievement;
 	protected int[] itemIds;

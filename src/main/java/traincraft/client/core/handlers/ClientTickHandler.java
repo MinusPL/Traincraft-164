@@ -13,7 +13,7 @@ import traincraft.client.core.helpers.CapesHelper;
 import traincraft.client.gui.HUDloco;
 import traincraft.common.Traincraft;
 import traincraft.api.Locomotive;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -43,8 +43,8 @@ public class ClientTickHandler implements ITickHandler {
     		}
     		if(!isHidden) {
     			if(mc.theWorld != null && mc != null && mc.theWorld.playerEntities != null) {
-    				Traincraft.proxy.doNEICheck(BlockIDs.tcRail.blockID);
-        			Traincraft.proxy.doNEICheck(BlockIDs.tcRailGag.blockID);
+    				Traincraft.proxy.doNEICheck(BlockIDs.TCBlocksList.blockID);
+        			Traincraft.proxy.doNEICheck(BlockIDs.TCBlocksList.blockID);
     				isHidden = true;
     			}
     		}

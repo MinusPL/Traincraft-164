@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import traincraft.api.LiquidManager;
 import traincraft.common.containers.ContainerDistil;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.Info;
 import traincraft.common.recipes.DistilRecipes;
 import traincraft.common.tile.TileEntityDistil;
@@ -30,7 +30,7 @@ public class GuiDistil extends GuiContainer {
 			/**
 			 * Stops showing 100% on copper 
 			 */
-			if(distilInventory.distilItemStacks[0].getItem().itemID == BlockIDs.oreTC.blockID && (distilInventory.distilItemStacks[0].getItemDamage() != 1 && distilInventory.distilItemStacks[0].getItemDamage() != 2)){
+			if(distilInventory.distilItemStacks[0].getItem().itemID == TCBlocksList.oreTC.blockID && (distilInventory.distilItemStacks[0].getItemDamage() != 1 && distilInventory.distilItemStacks[0].getItemDamage() != 2)){
 				return;
 			}
 			double plasticChance = DistilRecipes.smelting().getPlasticChance(distilInventory.distilItemStacks[0].getItem().itemID);

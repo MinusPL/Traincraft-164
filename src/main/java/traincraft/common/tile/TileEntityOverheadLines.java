@@ -5,7 +5,7 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import traincraft.common.blocks.tracks.BlockEnergyTrack;
 import traincraft.common.core.handlers.OverheadLinesEnergyNetHandler;
@@ -85,6 +85,7 @@ public class TileEntityOverheadLines extends TileEntity implements IEnergySink{
 		List lis1 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBoxFromPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 0.1), (double)(this.yCoord+0.1), (double)(this.zCoord + 0.1)).expand(1.2D, 1.2D, 1.2D));
 */
 	}
+	
 	public double getDistanceSq(double par1, double par3, double par5) {
 		double var7 = this.xCoord - par1;
 		double var9 = this.yCoord - par3;
@@ -93,6 +94,7 @@ public class TileEntityOverheadLines extends TileEntity implements IEnergySink{
 		double var11 = this.zCoord - par5;
 		return Math.sqrt(var7 * var7 + var11 * var11);
 	}
+	
 	public int sendEnergy(double send) {
 		for (int i = 0; i < network.getNetwork().size(); i++) {
 			if (network.getNetwork().get(i) != null && !network.getNetwork().get(i).equals(this)) {
@@ -152,13 +154,9 @@ public class TileEntityOverheadLines extends TileEntity implements IEnergySink{
 		Back=par1NBTTagCompound.getBoolean("Back"); 
 		Front=par1NBTTagCompound.getBoolean("Front");
 	}
-	@Override
-	public double demandedEnergyUnits() {
-		return this.getMaxEnergy() - this.getEnergy();
-	}
 
 	@Override
-	public double injectEnergyUnits(ForgeDirection directionFrom, double amount) {
+	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
 		this.energy+=amount;
 		isProvider = true;
 		if(this.energy>this.getMaxEnergy()){
@@ -168,6 +166,7 @@ public class TileEntityOverheadLines extends TileEntity implements IEnergySink{
 		}
 		return 0;
 	}
+	
 	public double getEnergy() {
 		return this.energy;
 	}
@@ -178,10 +177,10 @@ public class TileEntityOverheadLines extends TileEntity implements IEnergySink{
 	public double getMaxEnergy() {
 		return this.maxEnergy;
 	}
-	@Override
+	/*@Override
 	public int getMaxSafeInput() {
 		return 1024;
-	}
+	}*/
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter,
 			ForgeDirection direction) {
@@ -189,6 +188,18 @@ public class TileEntityOverheadLines extends TileEntity implements IEnergySink{
 	}
 	public boolean facingMatchesDirection(Direction direction) { 
 		return direction.toSideValue() == getFacing(); 
+	}
+
+	@Override
+	public double getDemandedEnergy()
+	{
+		return this.getMaxEnergy() - this.getEnergy();
+	}
+
+	@Override
+	public int getSinkTier()
+	{
+		return 3;
 	}
 }
 

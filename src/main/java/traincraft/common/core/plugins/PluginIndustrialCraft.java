@@ -1,6 +1,6 @@
 package traincraft.common.core.plugins;
 
-import ic2.api.item.Items;
+import ic2.api.item.IC2Items;
 
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -29,11 +29,11 @@ public class PluginIndustrialCraft implements IPlugin {
 	}
 
 	private void initItems() {
-		for (int i = 0; i < names.length; i++) {
+		/*for (int i = 0; i < names.length; i++) {
 			if (Items.getItem(names[i]) != null) {
 				items.put(names[i], Items.getItem(names[i]).copy());
 			}
-		}
+		}*/
 	}
 
 	//call getItem failed for uraniumCell, coolingCell, depletedIsotopeCell

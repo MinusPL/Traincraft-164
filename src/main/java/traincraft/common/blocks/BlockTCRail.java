@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import traincraft.common.Traincraft;
 import traincraft.common.items.ItemTCRail;
 import traincraft.common.items.ItemTCRail.TrackTypes;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.Info;
 import traincraft.common.library.ItemIDs;
 import traincraft.common.tile.TileTCRail;
@@ -108,7 +108,7 @@ public class BlockTCRail extends Block {
 				world.removeBlockTileEntity(i, j, k);
 			}
 		}
-		if (!world.doesBlockHaveSolidTopSurface(i, j - 1, k) && world.getBlockId(i, j-1, k) != BlockIDs.bridgePillar.blockID) {
+		if (!world.doesBlockHaveSolidTopSurface(i, j - 1, k) && world.getBlockId(i, j-1, k) != BlockIDs.TCBlocksList.blockID) {
 			world.destroyBlock(i, j, k, false);
 			world.removeBlockTileEntity(i, j, k);
 		}

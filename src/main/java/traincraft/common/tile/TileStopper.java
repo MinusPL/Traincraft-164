@@ -8,9 +8,11 @@
 package traincraft.common.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import traincraft.common.Traincraft;
 import traincraft.common.core.handlers.PacketHandler;
+import traincraft.common.core.handlers.packet.getTEPClient;
 
 public class TileStopper extends TileEntity {
 
@@ -42,10 +44,10 @@ public class TileStopper extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPClient(this);
+		return Traincraft.network.getPacketFrom(new getTEPClient(this));
 	}
 
-	public void handlePacketDataFromServer(byte orientation) {
+	public void handlePacketDataFromServer(int orientation) {
 		facingMeta = orientation;
 	}
 	

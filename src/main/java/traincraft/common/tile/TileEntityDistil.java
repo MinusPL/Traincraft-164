@@ -5,14 +5,17 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,9 +24,12 @@ import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 import traincraft.api.LiquidManager;
 import traincraft.api.LiquidManager.StandardTank;
+import traincraft.common.Traincraft;
 import traincraft.common.blocks.BlockDistil;
+import traincraft.common.blocks.TCBlocks;
 import traincraft.common.core.handlers.PacketHandler;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.core.handlers.packet.getTEPClient;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.ItemIDs;
 import traincraft.common.recipes.DistilRecipes;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -139,7 +145,8 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName()
+	{
 		return "Distillation tower";
 	}
 
@@ -147,10 +154,10 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 	public void readFromNBT(NBTTagCompound nbtTag) {
 		super.readFromNBT(nbtTag);
 		facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
-		NBTTagList nbttaglist = nbtTag.getTagList("Items");
+		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		distilItemStacks = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound1.getByte("Slot");
 			if (byte0 >= 0 && byte0 < distilItemStacks.length) {
 				this.distilItemStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
@@ -264,7 +271,7 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 							amount = 0;
 						}
 						if (theTank.getFluid() != null) {
-							liquidItemID = theTank.getFluid().fluidID;
+							liquidItemID = theTank.getFluid().getFluidID();
 						}
 						else {
 							liquidItemID = 0;
@@ -281,7 +288,7 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 				amount = 0;
 			}
 			if (theTank.getFluid() != null) {
-				liquidItemID = theTank.getFluid().fluidID;
+				liquidItemID = theTank.getFluid().getFluidID();
 			}
 			else {
 				liquidItemID = 0;
@@ -291,7 +298,7 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 
 		}
 		if (flag1) {
-			onInventoryChanged();
+			markDirty();
 		}
 	}
 
@@ -301,7 +308,7 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 				distilItemStacks[i] = itemstack1;
 			return true;
 		}
-		else if (distilItemStacks[i] != null && distilItemStacks[i].itemID == itemstack1.itemID && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || distilItemStacks[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(distilItemStacks[i], itemstack1)) {
+		else if (distilItemStacks[i] != null && distilItemStacks[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || distilItemStacks[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(distilItemStacks[i], itemstack1)) {
 			int var9 = distilItemStacks[i].stackSize + itemstack1.stackSize;
 			if (var9 <= itemstack1.getMaxStackSize()) {
 				if (doAdd)
@@ -322,11 +329,12 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 		if (distilItemStacks[0] == null) {
 			return false;
 		}
-		ItemStack itemstack = DistilRecipes.smelting().getSmeltingResult(distilItemStacks[0].getItem().itemID);
+		ItemStack itemstack = DistilRecipes.smelting().getSmeltingResult(distilItemStacks[0].getItem());
 		if (itemstack == null) {
 			return false;
 		}
-		if (distilItemStacks[0].getItem().itemID == BlockIDs.oreTC.blockID && (distilItemStacks[0].getItemDamage() != 1 && distilItemStacks[0].getItemDamage() != 2)) {
+		
+		if (distilItemStacks[0].getItem() == Item.getItemFromBlock(Blocks.oreTC.block) && (distilItemStacks[0].getItemDamage() != 1 && distilItemStacks[0].getItemDamage() != 2)) {
 			return false;
 		}
 		FluidStack resultLiquid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
@@ -340,9 +348,9 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 		if (!canSmelt()) {
 			return;
 		}
-		ItemStack itemstack = DistilRecipes.smelting().getSmeltingResult(distilItemStacks[0].getItem().itemID);
-		ItemStack plasticStack = DistilRecipes.smelting().getPlasticResult(distilItemStacks[0].getItem().itemID);
-		int plasticChance = DistilRecipes.smelting().getPlasticChance(distilItemStacks[0].getItem().itemID);
+		ItemStack itemstack = DistilRecipes.smelting().getSmeltingResult(distilItemStacks[0].getItem());
+		ItemStack plasticStack = DistilRecipes.smelting().getPlasticResult(distilItemStacks[0].getItem());
+		int plasticChance = DistilRecipes.smelting().getPlasticChance(distilItemStacks[0].getItem());
 		FluidStack resultLiquid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
 		if (resultLiquid == null)
 			return;
@@ -356,7 +364,7 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 				amount = theTank.getFluid().amount;
 			}
 			if (theTank.getFluid() != null) {
-				liquidItemID = theTank.getFluid().fluidID;
+				liquidItemID = theTank.getFluid().getFluidID();
 			}
 			PacketHandler.sendPacketToClients(PacketHandler.setDistilLiquid(this), this.worldObj, xCoord, yCoord, zCoord, 12.0D);
 		}
@@ -376,37 +384,61 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 		if (distilItemStacks[3] == null) {
 			distilItemStacks[3] = plasticStack.copy();
 		}
-		else if (distilItemStacks[3].itemID == plasticStack.itemID) {
+		else if (distilItemStacks[3].getItem() == plasticStack.getItem()) {
 			distilItemStacks[3].stackSize += plasticStack.stackSize;
 		}
-		this.onInventoryChanged();
+		this.markDirty();
 	}
 
 	private int getItemBurnTime(ItemStack it) {
 		if (it == null) {
 			return 0;
 		}
-		int var1 = it.getItem().itemID;
-		if (var1 < 256 && Block.blocksList[var1].blockMaterial == Material.wood)
-			return 300;
-		if (var1 == Item.stick.itemID)
+		Item var1 = it.getItem();
+		if (var1 == Items.stick)
+		{
 			return 100;
-		if (var1 == Item.coal.itemID)
+		}
+		else if (var1 == Items.coal)
+		{
 			return 2600;
-		if (var1 == Item.bucketLava.itemID)
+		}
+		else if (var1 == Items.lava_bucket)
+		{
 			return 20000;
-		if (var1 == Block.sapling.blockID)
+		}
+		else if (var1 == Item.getItemFromBlock(Blocks.sapling))
+		{
 			return 100;
-		if (var1 == Item.blazeRod.itemID)
+		}
+		else if (var1 == Items.blaze_rod)
+		{
 			return 2500;
-		if (var1 == BlockIDs.oreTC.blockID && it.getItemDamage() == 1)
+		}
+		else if (var1 == Item.getItemFromBlock(Blocks.oreTC.block) && it.getItemDamage() == 1)
+		{
 			return 2500;
-		if (var1 == BlockIDs.oreTC.blockID && it.getItemDamage() == 2)
+		}
+		else if (var1 == Item.getItemFromBlock(Blocks.oreTC.block) && it.getItemDamage() == 2)
+		{
 			return 2500;
-		if (var1 == ItemIDs.diesel.itemID)
+		}
+		else if (var1 == ItemIDs.diesel.item)
+		{
 			return 4000;
-		if (var1 == ItemIDs.refinedFuel.itemID)
+		}
+		else if (var1 == ItemIDs.refinedFuel.item)
+		{
 			return 6000;
+		}
+		else
+		{
+			if(Block.getBlockFromItem(var1).getMaterial() == Material.wood)
+			{
+				return 300;
+			}
+		}
+		
 		int ret = GameRegistry.getFuelValue(it);
 		return ret;
 
@@ -417,7 +449,7 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 		if (worldObj == null) {
 			return true;
 		}
-		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
@@ -433,10 +465,10 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 	}
 
 	@Override
-	public void openChest() {}
+	public void openInventory() {}
 
 	@Override
-	public void closeChest() {}
+	public void closeInventory() {}
 
 	/*@Override
 	public int getStartInventorySide(ForgeDirection side) {
@@ -454,7 +486,7 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPClient(this);
+		return Traincraft.network.getPacketFrom(new getTEPClient(this));
 	}
 
 	public void handlePacketDataFromServer(byte orientation, short cookTime, short burnTime, short amount, short liquidID) {
@@ -523,7 +555,8 @@ public class TileEntityDistil extends TileEntity implements IInventory, IFluidHa
 	}
 
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean hasCustomInventoryName()
+	{
 		return false;
 	}
 

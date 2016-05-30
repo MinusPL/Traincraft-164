@@ -65,7 +65,7 @@ import traincraft.common.entity.rollingStock.EntityStockCar;
 import traincraft.common.entity.rollingStock.EntityTracksBuilder;
 import traincraft.common.items.ItemTCRail;
 import traincraft.common.items.ItemTCRail.TrackTypes;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.EnumTrains;
 import traincraft.common.tile.TileTCRail;
 import traincraft.common.tile.TileTCRailGag;
@@ -870,7 +870,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 			}
 		}
 
-		if (BlockRailBase.isRailBlockAt(worldObj, i, j - 1, k) || worldObj.getBlockId(i, j - 1, k) == BlockIDs.tcRail.blockID || worldObj.getBlockId(i, j - 1, k) == BlockIDs.tcRailGag.blockID) {
+		if (BlockRailBase.isRailBlockAt(worldObj, i, j - 1, k) || worldObj.getBlockId(i, j - 1, k) == BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i, j - 1, k) == BlockIDs.TCBlocksList.blockID) {
 			j--;
 		}
 
@@ -1197,7 +1197,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 				}
 			}
 		}
-		else if (l == BlockIDs.tcRail.blockID) {
+		else if (l == BlockIDs.TCBlocksList.blockID) {
 			//applyDragAndPushForces();
 			limitSpeedOnTCRail(i, j, k);
 			//if(worldObj.getBlockTileEntity(i,j,k)==null || !(worldObj.getBlockTileEntity(i,j,k) instanceof TileTCRail))return;
@@ -1239,7 +1239,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 			}
 
 		}
-		else if (l == BlockIDs.tcRailGag.blockID) {
+		else if (l == BlockIDs.TCBlocksList.blockID) {
 			//applyDragAndPushForces();
 			limitSpeedOnTCRail(i, j, k);
 			//if(worldObj.getBlockTileEntity(i,j,k)==null || !(worldObj.getBlockTileEntity(i,j,k) instanceof TileTCRailGag))return;
@@ -2612,13 +2612,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		int j = MathHelper.floor_double(par3);
 		int k = MathHelper.floor_double(par5);
 
-		if (worldObj.getBlockId(i, j - 1, k) == BlockIDs.tcRail.blockID || worldObj.getBlockId(i, j - 1, k) == BlockIDs.tcRailGag.blockID) {
+		if (worldObj.getBlockId(i, j - 1, k) == BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i, j - 1, k) == BlockIDs.TCBlocksList.blockID) {
 			--j;
 		}
 
 		int l = this.worldObj.getBlockId(i, j, k);
 		int i1;
-		if (l == BlockIDs.tcRail.blockID || l == BlockIDs.tcRailGag.blockID) {
+		if (l == BlockIDs.TCBlocksList.blockID || l == BlockIDs.TCBlocksList.blockID) {
 			i1 = worldObj.getBlockMetadata(i, j, k);
 			if (i1 == 2) i1 = 0;
 			if (i1 == 3) i1 = 1;
@@ -2626,14 +2626,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		else {
 			return null;
 		}
-		if (l != BlockIDs.tcRail.blockID && l != BlockIDs.tcRailGag.blockID) {
+		if (l != BlockIDs.TCBlocksList.blockID && l != BlockIDs.TCBlocksList.blockID) {
 			par3 = (double) j;
 
 			if (i1 >= 2 && i1 <= 5) {
 				par3 = (double) (j + 1);
 			}
 		}
-		else if (l == BlockIDs.tcRail.blockID || l == BlockIDs.tcRailGag.blockID) {
+		else if (l == BlockIDs.TCBlocksList.blockID || l == BlockIDs.TCBlocksList.blockID) {
 			TileEntity tile = worldObj.getBlockTileEntity(i, j, k);
 			if (tile != null && tile instanceof TileTCRail) {
 				if (((TileTCRail) tile).getType() != null && !ItemTCRail.isTCSlopeTrack((TileTCRail) tile)) {
@@ -2659,7 +2659,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		par1 += d4 * par7;
 		par5 += d5 * par7;
 
-		if (l != BlockIDs.tcRail.blockID && l != BlockIDs.tcRailGag.blockID) {
+		if (l != BlockIDs.TCBlocksList.blockID && l != BlockIDs.TCBlocksList.blockID) {
 			if (aint[0][1] != 0 && MathHelper.floor_double(par1) - i == aint[0][0] && MathHelper.floor_double(par5) - k == aint[0][2]) {
 				par3 += (double) aint[0][1];
 			}
@@ -2675,7 +2675,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		int i = MathHelper.floor_double(par1);
 		int j = MathHelper.floor_double(par3);
 		int k = MathHelper.floor_double(par5);
-		if (worldObj.getBlockId(i, j - 1, k) == BlockIDs.tcRail.blockID || worldObj.getBlockId(i, j - 1, k) == BlockIDs.tcRailGag.blockID) {
+		if (worldObj.getBlockId(i, j - 1, k) == BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i, j - 1, k) == BlockIDs.TCBlocksList.blockID) {
 			--j;
 		}
 
@@ -2699,7 +2699,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		 * ().equals(TrackTypes.MEDIUM_SLOPE.getLabel())){ shouldIgnoreYCoord =
 		 * true; } }
 		 */
-		if (l == BlockIDs.tcRail.blockID || l == BlockIDs.tcRailGag.blockID) {
+		if (l == BlockIDs.TCBlocksList.blockID || l == BlockIDs.TCBlocksList.blockID) {
 			//par3 = (double) j;
 			int[][] aint = matrix[i1];
 			double d3 = 0.0D;

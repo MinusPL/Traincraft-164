@@ -4,7 +4,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import traincraft.common.core.handlers.PacketHandler;
 
@@ -13,7 +13,7 @@ public class TileBridgePillar extends TileEntity {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public double getMaxRenderDistanceSquared() {
-		if(FMLClientHandler.instance()!=null && FMLClientHandler.instance().getClient()!=null && FMLClientHandler.instance().getClient().gameSettings!=null){
+		/*if(FMLClientHandler.instance()!=null && FMLClientHandler.instance().getClient()!=null && FMLClientHandler.instance().getClient().gameSettings!=null){
 			if (FMLClientHandler.instance().getClient().gameSettings.renderDistance == 0) {
 				return 30000.0D;
 			}
@@ -25,7 +25,8 @@ public class TileBridgePillar extends TileEntity {
 			} else return 4096.0;
 		}else{
 			return 4096.0;
-		}
+		}*/
+		return 4096.0D;
 	}
 	
 	@Override

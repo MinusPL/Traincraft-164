@@ -12,14 +12,17 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import traincraft.common.Traincraft;
 import traincraft.common.core.TraincraftBlockUtil;
 import traincraft.common.core.handlers.PacketHandler;
 import traincraft.common.core.handlers.ServerTickHandler;
+import traincraft.common.core.handlers.packet.getTEPClient;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileWindMill extends TileEntity implements IEnergySource {
 	private int facingMeta;
@@ -65,10 +68,10 @@ public class TileWindMill extends TileEntity implements IEnergySource {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPClient(this);
+		return Traincraft.network.getPacketFrom(new getTEPClient(this));
 	}
 
-	public void handlePacketDataFromServer(byte orientation, int wind) {
+	public void handlePacketDataFromServer(int orientation, int wind) {
 		facingMeta = orientation;
 		if (orientation != -1)
 			worldObj.setBlockMetadataWithNotify((int) xCoord, (int) yCoord, (int) zCoord, orientation, 2);
@@ -103,7 +106,7 @@ public class TileWindMill extends TileEntity implements IEnergySource {
 		 */
 		if (updateTicks % 20 == 0 && !worldObj.isRemote) {
 			if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-				Block block = Block.blocksList[this.worldObj.getBlockId(this.xCoord, this.yCoord + 1, this.zCoord)];
+				Block block = worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
 				if (block != null) {
 					ArrayList<ItemStack> stacks = new ArrayList<ItemStack>(TraincraftBlockUtil.getItemStackFromBlock(worldObj, this.xCoord, this.yCoord + 1, this.zCoord));
 					for (ItemStack s : stacks) {
@@ -135,18 +138,21 @@ public class TileWindMill extends TileEntity implements IEnergySource {
 			//System.out.println(this.IC2production);
 			if (IC2production > this.getMaxEnergyOutput())
 				IC2production = this.getMaxEnergyOutput();
-			PacketHandler.sendPacketToClients(this.getDescriptionPacket(), worldObj, this.xCoord, this.yCoord, this.zCoord, 40D);
+			
+			Traincraft.network.sendToAllAround(new getTEPClient(this), new TargetPoint(worldObj.provider.dimensionId, this.xCoord, this.yCoord, this.zCoord, 40D));
 		}
 
 	}
 
 	@Override
-	public boolean canUpdate() {
+	public boolean canUpdate()
+	{
 		return true;
 	}
 
 	//@Override
-	public int getMaxEnergyOutput() {
+	public int getMaxEnergyOutput()
+	{
 		return 10;
 	}
 
@@ -162,4 +168,10 @@ public class TileWindMill extends TileEntity implements IEnergySource {
 
 	@Override
 	public void drawEnergy(double amount) {}
+
+	@Override
+	public int getSourceTier()
+	{
+		return 1;
+	}
 }

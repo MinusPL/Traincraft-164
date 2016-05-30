@@ -7,21 +7,21 @@ import traincraft.common.Traincraft;
 import traincraft.common.core.interfaces.IPlugin;
 import traincraft.common.core.plugins.PluginIndustrialCraft;
 import traincraft.common.core.plugins.PluginRailcraft;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 
 public class TraincraftCore {
 	//public static BaseMod instance;
-	public static IPlugin pluginIC2 = new PluginIndustrialCraft();
-	public static IPlugin pluginRailcraft = new PluginRailcraft();
+	//public static IPlugin pluginIC2 = new PluginIndustrialCraft();
+	//public static IPlugin pluginRailcraft = new PluginRailcraft();
 
 	public static void RegisterNewTracks() {
-		((PluginRailcraft) pluginRailcraft).registerTracks();
+		//((PluginRailcraft) pluginRailcraft).registerTracks();
 	}
 
 	public static void ModsLoaded() {
-		if (pluginIC2.isAvailable()) {
+		/*if (pluginIC2.isAvailable()) {
 			pluginIC2.initialize();
 			Traincraft.tcLog.info("Added plugin " + pluginIC2.getClass());
 		}
@@ -34,7 +34,7 @@ public class TraincraftCore {
 		}
 		else {
 			Traincraft.tcLog.info("Skipped plugin " + pluginRailcraft.getClass() + " mod not available.");
-		}
+		}*/
 	}
 
 	public static boolean isPresent(String modId) {

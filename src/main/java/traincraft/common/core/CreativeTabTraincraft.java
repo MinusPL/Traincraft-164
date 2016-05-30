@@ -8,6 +8,8 @@
 package traincraft.common.core;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import traincraft.common.library.ItemIDs;
 
@@ -17,13 +19,18 @@ public class CreativeTabTraincraft extends CreativeTabs {
 		super(par1, par2Str);
 	}
 
-	@Override
+	/*@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(ItemIDs.minecartLocoBR80_DB.item);
-	}
+		return new ItemStack(Blocks.bedrock);
+	}*/
 
 	@Override
 	public String getTranslatedTabLabel() {
 		return super.getTabLabel();
+	}
+
+	@Override
+	public Item getTabIconItem() {
+		return Item.getItemFromBlock(Blocks.bedrock);
 	}
 }

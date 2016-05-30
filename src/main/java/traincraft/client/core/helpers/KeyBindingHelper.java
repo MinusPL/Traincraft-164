@@ -21,7 +21,7 @@ public class KeyBindingHelper {
 			keyBindingsList = new ArrayList<KeyBinding>();
 		}
 
-		keyBindingsList.add(new KeyBinding(name, value));
+		keyBindingsList.add(new KeyBinding(name, value, "key.categories.traincraft"));
 	}
 
 	public static void addIsRepeating(boolean value) {
