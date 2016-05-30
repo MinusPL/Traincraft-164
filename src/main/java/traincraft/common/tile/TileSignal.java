@@ -5,10 +5,12 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import traincraft.common.Traincraft;
 import traincraft.common.core.handlers.PacketHandler;
+import traincraft.common.core.handlers.packet.getTEPClient;
 
 //client
 public class TileSignal extends TileEntity {
@@ -37,7 +39,7 @@ public class TileSignal extends TileEntity {
 		this.rot = facing;
 	}
 
-	public void handlePacketDataFromServer(byte orientation) {
+	public void handlePacketDataFromServer(int orientation) {
 		facingMeta = orientation;
 	}
 	@Override
@@ -55,7 +57,7 @@ public class TileSignal extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPClient(this);
+		return Traincraft.network.getPacketFrom(new getTEPClient(this));
 	}
 	@Override
 	public void updateEntity() {

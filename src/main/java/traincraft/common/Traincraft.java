@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.AchievementPage;
-import net.minecraftforge.common.EnumHelper;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.common.MinecraftForge;
 import traincraft.api.LiquidManager;
 import traincraft.common.blocks.TCBlocks;
@@ -42,15 +42,18 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
 @Mod(modid = Info.modID, name = Info.modName, version = Info.modVersion)
-@NetworkMod(clientSideRequired = true, serverSideRequired = true, versionBounds = "[" + Info.modVersion + "]", channels = { Info.channel }, packetHandler = PacketHandler.class, connectionHandler = KeyServerHandler.class)
+//@NetworkMod(clientSideRequired = true, serverSideRequired = true, versionBounds = "[" + Info.modVersion + "]", channels = { Info.channel }, packetHandler = PacketHandler.class, connectionHandler = KeyServerHandler.class)
 public class Traincraft {
 
+	/*Network wrapper*/
+	public static SimpleNetworkWrapper network;
+	
 	/* TrainCraft instance */
 	@Instance(Info.modID)
 	public static Traincraft instance;
@@ -65,9 +68,9 @@ public class Traincraft {
 	/* Creative tab for Traincraft */
 	public static CreativeTabs tcTab;
 
-	public EnumArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[] { 1, 3, 2, 1 }, 25);
-	public EnumArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[] {1, 3, 2, 1}, 25);
-	public EnumArmorMaterial armorCompositeSuit = EnumHelper.addArmorMaterial("TCsuit", 70, new int[] {5, 12, 8, 5}, 50);
+	public ArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[] { 1, 3, 2, 1 }, 25);
+	public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[] {1, 3, 2, 1}, 25);
+	public ArmorMaterial armorCompositeSuit = EnumHelper.addArmorMaterial("TCsuit", 70, new int[] {5, 12, 8, 5}, 50);
 	public static int trainArmor;
 	public static int trainCloth;
 	public static int trainCompositeSuit;
@@ -77,42 +80,42 @@ public class Traincraft {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {	
-		proxy.registerSounds();
+		//proxy.registerSounds();
 		//ForgeChunkManager.setForcedChunkLoadingCallback(instance, ChunkHandler.getInstance());
-		MinecraftForge.EVENT_BUS.register(ChunkHandler.getInstance());
+		//MinecraftForge.EVENT_BUS.register(ChunkHandler.getInstance());
 
 		/* Log */
-		tcLog.setParent(FMLLog.getLogger());
-		tcLog.info("Starting Traincraft " + Info.modVersion + "!");
+		//tcLog.setParent((Logger) FMLLog.getLogger());
+		//tcLog.info("Starting Traincraft " + Info.modVersion + "!");
 
 		/* Config handler */
 		ConfigHandler.init(new File(event.getModConfigurationDirectory(), Info.modName + ".cfg"));
-		proxy.getKeysFromProperties();
+		//proxy.getKeysFromProperties();
 
 		/* Register the KeyBinding Handler */
-		proxy.registerKeyBindingHandler();
+		//proxy.registerKeyBindingHandler();
 
 		/* Tile Entities */
-		proxy.registerTileEntities();
+		//proxy.registerTileEntities();
 
 		/* Rendering registration */
-		proxy.registerRenderInformation();
+		/*proxy.registerRenderInformation();
 		trainArmor = proxy.addArmor("armor");
 		trainCloth = proxy.addArmor("Paintable");
-		trainCompositeSuit = proxy.addArmor("CompositeSuit");
+		trainCompositeSuit = proxy.addArmor("CompositeSuit");*/
 		
 		/* Tab for creative items/blocks */
 		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft");
 
 		/* Ore generation */
-		GameRegistry.registerWorldGenerator(new WorldGenWorld());
-		MapGenStructureIO.func_143031_a(ComponentVillageTrainstation.class, "Trainstation");
-
+		GameRegistry.registerWorldGenerator(new WorldGenWorld(), 0);
+		//MapGenStructureIO.func_143031_a(ComponentVillageTrainstation.class, "Trainstation");
+		
 		/* Player tracker */
-		GameRegistry.registerPlayerTracker(new PlayerTracker());
+		//GameRegistry.registerPlayerTracker(new PlayerTracker());
 
 		/* Track registration */
-		TraincraftCore.RegisterNewTracks();
+		//TraincraftCore.RegisterNewTracks();
 		
 		/*Fuel registration*/
 		GameRegistry.registerFuelHandler(new FuelHandler());
@@ -121,13 +124,16 @@ public class Traincraft {
 		TCItems.init();
 		
 		/* Register entities */
-		EntityHandler.init();
+		/*EntityHandler.init();
 
 		AchievementHandler.load();
 		AchievementPage.registerAchievementPage(AchievementHandler.tmPage);
 		
+		/* Network configuration */
+		//network = NetworkRegistry.INSTANCE.newSimpleChannel(Info.channel);
+		
 		/* Check holidays */
-		proxy.isHoliday();
+		//proxy.isHoliday();
 	}
 
 	@EventHandler
@@ -136,50 +142,50 @@ public class Traincraft {
 		//proxy.getCape();
 		
 		/* GUI handler initiation */
-		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
-		GameRegistry.registerCraftingHandler(new CraftingHandler());
+		//NetworkRegistry.instance().registerGuiHandler(instance, proxy);
+		//GameRegistry.registerCraftingHandler(new CraftingHandler());
 
 		/* Ore dictionary */
 		OreHandler.registerOres();
 
 		/* Recipes */
-		RecipeHandler.initBlockRecipes();
+		//RecipeHandler.initBlockRecipes();
 		RecipeHandler.initItemRecipes();
-		AssemblyTableRecipes.recipes();
+		//AssemblyTableRecipes.recipes();
 
 		/* Register the liquids */
-		LiquidManager.getInstance().registerLiquids();
+		//LiquidManager.getInstance().registerLiquids();
 		
 		/* Liquid FX */
-		proxy.registerTextureFX();
+		//proxy.registerTextureFX();
 
 		/* Try to load mysql */
 		if (ConfigHandler.MYSQL_ENABLE)
 			mysqlLoggerEnabled = logMysql.enableLogger();
 		
 		/*Trainman Villager*/
-		VillagerRegistry.instance().registerVillagerId(ConfigHandler.TRAINCRAFT_VILLAGER_ID);
+		/*VillagerRegistry.instance().registerVillagerId(ConfigHandler.TRAINCRAFT_VILLAGER_ID);
 		VillagerTraincraftHandler villageHandler = new VillagerTraincraftHandler();
 		VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
 	    proxy.registerVillagerSkin(ConfigHandler.TRAINCRAFT_VILLAGER_ID, "station_chief.png");
 	    VillagerRegistry.instance().registerVillageTradeHandler(ConfigHandler.TRAINCRAFT_VILLAGER_ID, villageHandler);
-	    
-	    proxy.registerBookHandler();
+	    */
+	    //proxy.registerBookHandler();
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
-		proxy.registerChunkHandler(instance);
+		//proxy.registerChunkHandler(instance);
 	}
 
 	@EventHandler
 	public void modsLoaded(FMLPostInitializationEvent event) {
 		TraincraftCore.ModsLoaded();
-		LiquidManager.getLiquidsFromDictionnary();
+		//LiquidManager.getLiquidsFromDictionnary();
 	}
 	
 	@EventHandler
 	public void serverStop(FMLServerStoppedEvent event) {
-		 proxy.killAllStreams();
+		 //proxy.killAllStreams();
 	}
 }

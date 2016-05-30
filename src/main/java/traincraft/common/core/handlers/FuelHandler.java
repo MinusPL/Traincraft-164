@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import traincraft.common.core.plugins.PluginIndustrialCraft;
 import traincraft.common.core.plugins.PluginRailcraft;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -33,8 +33,10 @@ public class FuelHandler implements IFuelHandler {
 	 * @param itemstack
 	 * @return
 	 */
-	public static int steamFuelLast(ItemStack it) {
-		if (it == null) {
+	public static int steamFuelLast(ItemStack it)
+	{
+		return 0;
+		/*if (it == null) {
 			return 0;
 		}
 		int var1 = it.getItem().itemID;
@@ -56,7 +58,7 @@ public class FuelHandler implements IFuelHandler {
 			return cokeCoal;
 
 		int ret = GameRegistry.getFuelValue(it);
-		return ret;
+		return ret;*/
 	}
 
 	/**
@@ -65,9 +67,11 @@ public class FuelHandler implements IFuelHandler {
 	 * water: this is a chance rate on each tick Default value for Fuel is 200 which mean 1 chance over 200 to consume one unit of water
 	 */
 	@Override
-	public int getBurnTime(ItemStack fuel) {
-		int var1 = fuel.itemID;
-		if(var1 == BlockIDs.oreTC.blockID && (fuel.getItemDamage()==1 || fuel.getItemDamage()==2)){
+	public int getBurnTime(ItemStack fuel)
+	{
+		Item var1 = fuel.getItem();
+		if(var1 == Item.getItemFromBlock(TCBlocksList.oreTC.block) && (fuel.getItemDamage()==1 || fuel.getItemDamage()==2))
+		{
 			return 2400;
 		}
 		return 0;

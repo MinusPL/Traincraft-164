@@ -15,7 +15,7 @@ import traincraft.common.library.Info;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.TickType;
 
-public class KeyBindingHandler extends KeyBindingRegistry.KeyHandler {
+public class KeyBindingHandler extends KeyHandler {
 
 	public KeyBindingHandler() {
 		super(KeyBindingHelper.gatherKeyBindings(), KeyBindingHelper.gatherIsRepeating());

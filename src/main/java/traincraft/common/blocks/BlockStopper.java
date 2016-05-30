@@ -24,7 +24,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import traincraft.common.Traincraft;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.Info;
 import traincraft.common.tile.TileStopper;
 import cpw.mods.fml.client.registry.RenderingRegistry;

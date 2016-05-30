@@ -31,7 +31,7 @@ import traincraft.common.core.handlers.BuilderOreHandler;
 import traincraft.common.core.handlers.FuelHandler;
 import traincraft.common.core.plugins.PluginIndustrialCraft;
 import traincraft.common.core.plugins.PluginRailcraft;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.GuiIDs;
 import traincraft.common.library.ItemIDs;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -984,7 +984,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		getBlockList(worldObj, i + d, j + hY + 1, k + 1);
 		getBlockList(worldObj, i + d, j + hY + 2, k - 1);
 		getBlockList(worldObj, i + d, j + hY + 2, k + 1);
-		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i + d, j + hY, k - 1)) || worldObj.getBlockId(i + d, j + hY, k - 1)==BlockIDs.tcRail.blockID || worldObj.getBlockId(i + d, j + hY, k - 1)==BlockIDs.tcRailGag.blockID)&& followTracks) {
+		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i + d, j + hY, k - 1)) || worldObj.getBlockId(i + d, j + hY, k - 1)==BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i + d, j + hY, k - 1)==BlockIDs.TCBlocksList.blockID)&& followTracks) {
 		}
 		else {
 			//worldObj.setBlockMetadataWithNotify(i + d, j+ hY, k - 1, 0);
@@ -992,7 +992,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			this.harvestBlock_do(vec);
 		}
 
-		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i + d, j + hY, k + 1)) || worldObj.getBlockId(i + d, j + hY, k + 1)==BlockIDs.tcRail.blockID || worldObj.getBlockId(i + d, j + hY, k + 1)==BlockIDs.tcRailGag.blockID )&& followTracks) {
+		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i + d, j + hY, k + 1)) || worldObj.getBlockId(i + d, j + hY, k + 1)==BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i + d, j + hY, k + 1)==BlockIDs.TCBlocksList.blockID )&& followTracks) {
 		}
 		else {
 			//worldObj.setBlockMetadataWithNotify(i + d, j+ hY, k + 1, 0);
@@ -1000,7 +1000,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			this.harvestBlock_do(vec);
 		}
 
-		if ((BlockRailBase.isRailBlock((worldObj.getBlockId(i + d, j + hY, k))) || worldObj.getBlockId(i + d, j + hY, k)==BlockIDs.tcRail.blockID || worldObj.getBlockId(i + d, j + hY, k)==BlockIDs.tcRailGag.blockID)&& followTracks) {
+		if ((BlockRailBase.isRailBlock((worldObj.getBlockId(i + d, j + hY, k))) || worldObj.getBlockId(i + d, j + hY, k)==BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i + d, j + hY, k)==BlockIDs.TCBlocksList.blockID)&& followTracks) {
 		}
 		else {
 			//worldObj.setBlockMetadataWithNotify(i + d, j+ hY, k, 0);
@@ -1153,7 +1153,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		getBlockList(worldObj, i + 1, j + hY + 1, k + d);
 		getBlockList(worldObj, i - 1, j + hY + 2, k + d);
 
-		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i - 1, j + hY, k + d)) || worldObj.getBlockId(i - 1, j + hY, k + d)==BlockIDs.tcRail.blockID || worldObj.getBlockId(i - 1, j + hY, k + d)==BlockIDs.tcRailGag.blockID) && followTracks) {
+		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i - 1, j + hY, k + d)) || worldObj.getBlockId(i - 1, j + hY, k + d)==BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i - 1, j + hY, k + d)==BlockIDs.TCBlocksList.blockID) && followTracks) {
 		}
 		else {
 			//worldObj.setBlockMetadataWithNotify(i - 1, j+ hY, k + d, 0, -1);
@@ -1162,7 +1162,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			this.harvestBlock_do(vec);
 		}
 
-		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i + 1, j + hY, k + d)) || worldObj.getBlockId(i + 1, j + hY, k + d)==BlockIDs.tcRail.blockID || worldObj.getBlockId(i + 1, j + hY, k + d)==BlockIDs.tcRailGag.blockID) && followTracks) {
+		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i + 1, j + hY, k + d)) || worldObj.getBlockId(i + 1, j + hY, k + d)==BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i + 1, j + hY, k + d)==BlockIDs.TCBlocksList.blockID) && followTracks) {
 		}
 		else {
 			//worldObj.setBlockMetadataWithNotify(i + 1, j+ hY, k + d, 0, -1);
@@ -1171,7 +1171,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			this.harvestBlock_do(vec);
 		}
 
-		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i, j + hY, k + d)) || worldObj.getBlockId(i, j + hY, k + d)==BlockIDs.tcRail.blockID || worldObj.getBlockId(i, j + hY, k + d)==BlockIDs.tcRailGag.blockID) && followTracks) {
+		if ((BlockRailBase.isRailBlock(worldObj.getBlockId(i, j + hY, k + d)) || worldObj.getBlockId(i, j + hY, k + d)==BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(i, j + hY, k + d)==BlockIDs.TCBlocksList.blockID) && followTracks) {
 		}
 		else {
 			//worldObj.setBlockMetadataWithNotify(i, j+ hY, k + d, 0, -1);

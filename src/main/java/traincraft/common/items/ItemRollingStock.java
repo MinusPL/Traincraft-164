@@ -28,7 +28,7 @@ import traincraft.common.core.handlers.ConfigHandler;
 import traincraft.common.core.handlers.RollingStockStatsEventHandler;
 import traincraft.common.entity.rollingStock.EntityTracksBuilder;
 import traincraft.common.items.ItemTCRail.TrackTypes;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.EnumTrains;
 import traincraft.common.library.Info;
 import traincraft.common.library.ItemIDs;
@@ -240,7 +240,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}else{
 						rollingStock.serverRealRotation = 180;
 					}
-					if(world.getBlockId(i, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k)==BlockIDs.tcRailGag.blockID){
+					if(world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID){
 						if(meta==0 || meta == 2){
 							rollingStock.rotationYaw = 90;
 						}else{
@@ -248,7 +248,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						}
 					}
 					if(rollingStock instanceof Locomotive){
-						if((world.getBlockId(i, j, k-1)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k-1)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k-1)))&&(world.getBlockId(i, j, k-2)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k-2)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k-2)))){
+						if((world.getBlockId(i, j, k-1)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k-1)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k-1)))&&(world.getBlockId(i, j, k-2)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k-2)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k-2)))){
 							if(meta==0 || meta == 2){
 								rollingStock.serverRealRotation = -90;
 							}
@@ -266,7 +266,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}else{
 						rollingStock.serverRealRotation = 90;
 					}
-					if(world.getBlockId(i, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k)==BlockIDs.tcRailGag.blockID){
+					if(world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID){
 						if(meta==1 || meta == 3){
 							rollingStock.rotationYaw = 0;
 						}else{
@@ -274,7 +274,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						}
 					}
 					if(rollingStock instanceof Locomotive){
-						if((world.getBlockId(i-1, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i-1, j, k)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i-1, j, k)))&&(world.getBlockId(i-2, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i-2, j, k)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i-2, j, k)))){
+						if((world.getBlockId(i-1, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i-1, j, k)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i-1, j, k)))&&(world.getBlockId(i-2, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i-2, j, k)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i-2, j, k)))){
 							if(meta==1 || meta == 3){
 								rollingStock.serverRealRotation = 180;
 							}
@@ -292,7 +292,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}else{
 						rollingStock.serverRealRotation = 180;
 					}
-					if(world.getBlockId(i, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k)==BlockIDs.tcRailGag.blockID){
+					if(world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID){
 						if(meta==0 || meta == 2){
 							rollingStock.rotationYaw = -90;
 						}else{
@@ -300,7 +300,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						}
 					}
 					if(rollingStock instanceof Locomotive){
-						if((world.getBlockId(i, j, k+1)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k+1)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k+1)))&&(world.getBlockId(i, j, k+2)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k+2)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k+2)))){
+						if((world.getBlockId(i, j, k+1)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k+1)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k+1)))&&(world.getBlockId(i, j, k+2)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k+2)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i, j, k+2)))){
 							if(meta == 0 || meta == 2){
 								rollingStock.serverRealRotation = 90;
 							}
@@ -318,7 +318,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}else{
 						rollingStock.serverRealRotation = 90;
 					}
-					if(world.getBlockId(i, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i, j, k)==BlockIDs.tcRailGag.blockID){
+					if(world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i, j, k)==BlockIDs.TCBlocksList.blockID){
 						if(meta==1 || meta == 3){
 							rollingStock.rotationYaw = 180;
 						}else{
@@ -326,7 +326,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						}
 					}
 					if(rollingStock instanceof Locomotive){
-						if((world.getBlockId(i+1, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i+1, j, k)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i+1, j, k)))&&(world.getBlockId(i+2, j, k)==BlockIDs.tcRail.blockID || world.getBlockId(i+2, j, k)==BlockIDs.tcRailGag.blockID || BlockRailBase.isRailBlock(world.getBlockId(i+2, j, k)))){
+						if((world.getBlockId(i+1, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i+1, j, k)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i+1, j, k)))&&(world.getBlockId(i+2, j, k)==BlockIDs.TCBlocksList.blockID || world.getBlockId(i+2, j, k)==BlockIDs.TCBlocksList.blockID || BlockRailBase.isRailBlock(world.getBlockId(i+2, j, k)))){
 							if(meta == 1 || meta == 3){
 								rollingStock.serverRealRotation = 0;
 							}

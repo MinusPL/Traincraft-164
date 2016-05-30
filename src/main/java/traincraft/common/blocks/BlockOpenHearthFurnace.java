@@ -24,7 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import traincraft.common.Traincraft;
-import traincraft.common.library.BlockIDs;
+import traincraft.common.library.TCBlocksList;
 import traincraft.common.library.GuiIDs;
 import traincraft.common.library.Info;
 import traincraft.common.tile.TileEntityOpenHearthFurnace;
@@ -58,7 +58,7 @@ public class BlockOpenHearthFurnace extends BlockContainer {
 
 	@Override
 	public int idDropped(int i, Random random, int j) {
-		return BlockIDs.openFurnaceIdle.blockID;
+		return BlockIDs.TCBlocksList.blockID;
 	}
 
 	@Override
@@ -113,10 +113,10 @@ public class BlockOpenHearthFurnace extends BlockContainer {
 		keepFurnaceInventory = true;
 
 		if (flag) {
-			world.setBlockMetadataWithNotify(i, j, k, BlockIDs.openFurnaceActive.blockID, 0);
+			world.setBlockMetadataWithNotify(i, j, k, BlockIDs.TCBlocksList.blockID, 0);
 		}
 		else {
-			world.setBlockMetadataWithNotify(i, j, k, BlockIDs.openFurnaceIdle.blockID, 0);
+			world.setBlockMetadataWithNotify(i, j, k, BlockIDs.TCBlocksList.blockID, 0);
 		}
 		keepFurnaceInventory = false;
 		world.setBlockMetadataWithNotify(i, j, k, l, 0);

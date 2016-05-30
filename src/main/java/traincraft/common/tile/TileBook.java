@@ -7,12 +7,14 @@
 
 package traincraft.common.tile;
 
-import traincraft.common.core.handlers.PacketHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
+import traincraft.common.Traincraft;
+import traincraft.common.core.handlers.PacketHandler;
+import traincraft.common.core.handlers.packet.getTEPClient;
 
 public class TileBook extends TileEntity {
 	
@@ -44,7 +46,7 @@ public class TileBook extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPClient(this);
+		return Traincraft.network.getPacketFrom(new getTEPClient(this));
 	}
 	
 	@Override
@@ -52,7 +54,7 @@ public class TileBook extends TileEntity {
 		super.updateEntity();
 	}
 
-	public void handlePacketDataFromServer(byte orientation) {
+	public void handlePacketDataFromServer(int orientation) {
 		facingMeta = orientation;
 	}
 }

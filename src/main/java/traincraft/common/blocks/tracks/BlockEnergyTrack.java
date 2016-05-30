@@ -18,8 +18,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 import traincraft.api.ElectricTrain;
 import traincraft.api.EntityRollingStock;
 import traincraft.common.core.handlers.EnergyNetHandler;
@@ -50,8 +50,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 
 	private Block getThisBlock() {
 		if (thisBlock == null) {
-			int id = getWorld().getBlockId(getX(), getY(), getZ());
-			thisBlock = Block.blocksList[id];
+			thisBlock = getWorld().getBlock(getX(), getY(), getZ());
 		}
 		return thisBlock;
 	}
@@ -75,7 +74,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 	}
 
 	@Override
-	public Icon getIcon() {
+	public IIcon getIcon() {
 		int meta = this.tileEntity.getBlockMetadata();
 		if (meta >= 6) {
 			if (energy > 0)
@@ -92,7 +91,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 	}
 
 	private void notifyNeighbors() {
-		int id = getWorld().getBlockId(getX(), getY(), getZ());
+		int id = getWorld().getBlock(getX(), getY(), getZ());
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), id);
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), id);
 

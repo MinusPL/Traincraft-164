@@ -1,19 +1,22 @@
 package traincraft.common.items;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import traincraft.common.library.Info;
 
 public class ItemBlockOreTC extends ItemBlock {
 
-	private final static String[] subNames = { "copperOre", "oilSands", "petroleum", "ballast" };
+	private final static String[] subNames = { "copper", "oilsands", "petroleum", "ballast" };
 
-	public ItemBlockOreTC(int id) {
-		super(id);
+	public ItemBlockOreTC(Block block) {
+		super(block);
 		setHasSubtypes(true);
 	}
 
 	@Override
-	public int getMetadata(int damageValue) {
+	public int getMetadata(int damageValue)
+	{
 		return damageValue;
 	}
 

@@ -12,10 +12,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import traincraft.common.core.handlers.PacketHandler;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.common.util.ForgeDirection;
+import traincraft.common.Traincraft;
+import traincraft.common.core.handlers.packet.getTEPClient;
 
 public class TileTrainWbench extends TileEntity implements IInventory {
 
@@ -80,12 +83,14 @@ public class TileTrainWbench extends TileEntity implements IInventory {
 	public void readFromNBT(NBTTagCompound nbtTag) {
 		super.readFromNBT(nbtTag);
 		facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
-		NBTTagList tagList = nbtTag.getTagList("Items");
+		NBTTagList tagList = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		workbenchItemStacks = new ItemStack[getSizeInventory()];
-		for (int i = 0; i < tagList.tagCount(); ++i) {
-			NBTTagCompound tagCompound = (NBTTagCompound) tagList.tagAt(i);
+		for (int i = 0; i < tagList.tagCount(); ++i)
+		{
+			NBTTagCompound tagCompound = (NBTTagCompound)tagList.getCompoundTagAt(i);
 			byte slot = tagCompound.getByte("Slot");
-			if (slot >= 0 && slot < workbenchItemStacks.length) {
+			if (slot >= 0 && slot < workbenchItemStacks.length)
+			{
 				workbenchItemStacks[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
 			}
 		}
@@ -117,8 +122,9 @@ public class TileTrainWbench extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public void onInventoryChanged() {
-		super.onInventoryChanged();
+	public void markDirty()
+	{
+		super.markDirty();
 	}
 
 	@Override
@@ -126,7 +132,7 @@ public class TileTrainWbench extends TileEntity implements IInventory {
 		if (worldObj == null) {
 			return true;
 		}
-		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
 		return player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
@@ -142,28 +148,14 @@ public class TileTrainWbench extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public String getInvName() {
-		return "TrainWorkbench";
+	public Packet getDescriptionPacket()
+	{
+		return Traincraft.network.getPacketFrom(new getTEPClient(this));
 	}
 
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPClient(this);
-	}
-
-	public void handlePacketDataFromServer(byte orientation) {
+	public void handlePacketDataFromServer(int orientation)
+	{
 		facing = ForgeDirection.getOrientation(orientation);
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	@Override
@@ -174,5 +166,29 @@ public class TileTrainWbench extends TileEntity implements IInventory {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+	}
+
+	@Override
+	public String getInventoryName()
+	{
+		return "TrainWorkbench";
+	}
+
+	@Override
+	public boolean hasCustomInventoryName()
+	{
+		return false;
+	}
+
+	@Override
+	public void openInventory()
+	{
+
+	}
+
+	@Override
+	public void closeInventory()
+	{
+		
 	}
 }
