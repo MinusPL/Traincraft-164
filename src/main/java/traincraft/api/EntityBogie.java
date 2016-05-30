@@ -22,7 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import traincraft.common.items.ItemTCRail;
 import traincraft.common.items.ItemTCRail.TrackTypes;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.tile.TileTCRail;
 import traincraft.common.tile.TileTCRailGag;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -430,7 +430,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
             {
                 --i;
             }*/
-            if (BlockRailBase.isRailBlockAt(worldObj, x, y - 1, z) || worldObj.getBlockId(x, y - 1, z) == BlockIDs.TCBlocksList.blockID || worldObj.getBlockId(x, y - 1, z) == BlockIDs.TCBlocksList.blockID) {
+            if (BlockRailBase.isRailBlockAt(worldObj, x, y - 1, z) || worldObj.getBlockId(x, y - 1, z) == BlockIDs.tcRail.blockID || worldObj.getBlockId(x, y - 1, z) == BlockIDs.tcRailGag.blockID) {
     			i--;
     			y--;
     		}
@@ -451,7 +451,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
                     this.onActivatorRailPass(j, i, k, (worldObj.getBlockMetadata(j, i, k) & 8) != 0);
                 }
             }
-            else if(l == BlockIDs.TCBlocksList.blockID){
+            else if(l == BlockIDs.tcRail.blockID){
     			//applyDragAndPushForces();
     			limitSpeedOnTCRail(x,y,z);
     			if(worldObj.getBlockTileEntity(x,y,z)==null || !(worldObj.getBlockTileEntity(x,y,z) instanceof TileTCRail))return;
@@ -491,7 +491,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
     				moveOnTCSlope(x, y, z, cx, cy, cz, slopeAngle, slopeHeight, slopeLength, meta);
     			}
 
-    		}else if(l == BlockIDs.TCBlocksList.blockID){
+    		}else if(l == BlockIDs.tcRailGag.blockID){
     			//applyDragAndPushForces();
     			limitSpeedOnTCRail(x,y,z);
     			if(worldObj.getBlockTileEntity(x,y,z)==null || !(worldObj.getBlockTileEntity(x,y,z) instanceof TileTCRailGag))return;

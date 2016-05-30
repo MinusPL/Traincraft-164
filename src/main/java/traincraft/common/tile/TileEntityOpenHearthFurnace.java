@@ -5,23 +5,18 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
-import traincraft.common.Traincraft;
+import net.minecraftforge.common.ForgeDirection;
 import traincraft.common.blocks.BlockOpenHearthFurnace;
 import traincraft.common.core.handlers.PacketHandler;
-import traincraft.common.core.handlers.packet.getTEPClient;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.ItemIDs;
 import traincraft.common.recipes.OpenHearthFurnaceRecipes;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -98,7 +93,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getInvName() {
 		return "Open Hearth Furnace";
 	}
 
@@ -106,10 +101,10 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 	public void readFromNBT(NBTTagCompound nbtTag) {
 		super.readFromNBT(nbtTag);
 		facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
-		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		NBTTagList nbttaglist = nbtTag.getTagList("Items");
 		furnaceItemStacks = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
 			byte byte0 = nbttagcompound1.getByte("Slot");
 			if (byte0 >= 0 && byte0 < furnaceItemStacks.length) {
 				this.furnaceItemStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
@@ -212,7 +207,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 			}
 		}
 		if (flag1) {
-			markDirty();
+			onInventoryChanged();
 		}
 	}
 
@@ -243,7 +238,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 		if (furnaceItemStacks[1] == null) {//second input slot
 			return false;
 		}
-		ItemStack itemstack = OpenHearthFurnaceRecipes.smelting().getSmeltingResultFromItem1(furnaceItemStacks[0].getItem());
+		ItemStack itemstack = OpenHearthFurnaceRecipes.smelting().getSmeltingResultFromItem1(furnaceItemStacks[0].getItem().itemID);
 		if (!OpenHearthFurnaceRecipes.smelting().areItemPartOfRecipe(furnaceItemStacks[0].copy(), furnaceItemStacks[1].copy())) {//second input slot
 			return false;
 		}
@@ -260,12 +255,12 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 		if (!canSmelt()) {
 			return;
 		}
-		ItemStack itemstack = OpenHearthFurnaceRecipes.smelting().getSmeltingResultFromItem1(furnaceItemStacks[0].getItem());
+		ItemStack itemstack = OpenHearthFurnaceRecipes.smelting().getSmeltingResultFromItem1(furnaceItemStacks[0].getItem().itemID);
 		if (furnaceItemStacks[3] == null) {
 			furnaceItemStacks[3] = itemstack.copy();
 
 		}
-		else if (furnaceItemStacks[3].getItem() == itemstack.getItem()) {
+		else if (furnaceItemStacks[3].itemID == itemstack.itemID) {
 			furnaceItemStacks[3].stackSize += itemstack.stackSize;
 
 		}
@@ -294,51 +289,27 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 		if (it == null) {
 			return 0;
 		}
-		Item var1 = it.getItem();
-		if (var1 == Items.stick)
-		{
+		int var1 = it.getItem().itemID;
+		if (var1 < 256 && Block.blocksList[var1].blockMaterial == Material.wood)
+			return 300;
+		if (var1 == Item.stick.itemID)
 			return 100;
-		}
-		else if (var1 == Items.coal)
-		{
+		if (var1 == Item.coal.itemID)
 			return 2600;
-		}
-		else if (var1 == Items.lava_bucket)
-		{
+		if (var1 == Item.bucketLava.itemID)
 			return 20000;
-		}
-		else if (var1 == Item.getItemFromBlock(Blocks.sapling))
-		{
+		if (var1 == Block.sapling.blockID)
 			return 100;
-		}
-		else if (var1 == Items.blaze_rod)
-		{
+		if (var1 == Item.blazeRod.itemID)
 			return 2500;
-		}
-		else if (var1 == Item.getItemFromBlock(Blocks.oreTC.block) && it.getItemDamage() == 1)
-		{
+		if (var1 == BlockIDs.oreTC.blockID && it.getItemDamage() == 1)
 			return 2500;
-		}
-		else if (var1 == Item.getItemFromBlock(Blocks.oreTC.block) && it.getItemDamage() == 2)
-		{
+		if (var1 == BlockIDs.oreTC.blockID && it.getItemDamage() == 2)
 			return 2500;
-		}
-		else if (var1 == ItemIDs.diesel.item)
-		{
+		if (var1 == ItemIDs.diesel.itemID)
 			return 4000;
-		}
-		else if (var1 == ItemIDs.refinedFuel.item)
-		{
+		if (var1 == ItemIDs.refinedFuel.itemID)
 			return 6000;
-		}
-		else
-		{
-			if(Block.getBlockFromItem(var1).getMaterial() == Material.wood)
-			{
-				return 300;
-			}
-		}
-		
 		int ret = GameRegistry.getFuelValue(it);
 		return ret;
 
@@ -349,7 +320,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 		if (worldObj == null) {
 			return true;
 		}
-		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
@@ -365,14 +336,14 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openChest() {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeChest() {}
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return Traincraft.network.getPacketFrom(new getTEPClient(this));
+		return PacketHandler.getTEPClient(this);
 	}
 
 	public void handlePacketDataFromServer(byte orientation, short cookTime, short burnTime) {
@@ -382,7 +353,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean isInvNameLocalized() {
 		return false;
 	}
 

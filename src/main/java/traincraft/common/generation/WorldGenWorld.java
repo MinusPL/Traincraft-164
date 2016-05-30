@@ -12,7 +12,7 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import traincraft.common.core.handlers.ConfigHandler;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenWorld implements IWorldGenerator {
@@ -24,11 +24,10 @@ public class WorldGenWorld implements IWorldGenerator {
 	public WorldGenWorld() {}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
-	{
-		copper = new WorldGenOres(TCBlocksList.oreTC.block, 0, 6);
-		oilSands = new WorldGenOres(TCBlocksList.oreTC.block, 1, 20);
-		petroleum = new WorldGenOres(TCBlocksList.oreTC.block, 2, 14);
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+		copper = new WorldGenOres(BlockIDs.oreTC.blockID, 0, 6);
+		oilSands = new WorldGenOres(BlockIDs.oreTC.blockID, 1, 20);
+		petroleum = new WorldGenOres(BlockIDs.oreTC.blockID, 2, 14);
 
 		if (ConfigHandler.ORE_GEN) {
 			oilSands.generateVeins(world, random, chunkX * 16, chunkZ * 16, 2, 60, 6);

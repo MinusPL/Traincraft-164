@@ -7,12 +7,16 @@
 
 package traincraft.common.core.handlers;
 
+import static net.minecraftforge.common.Configuration.CATEGORY_BLOCK;
+import static net.minecraftforge.common.Configuration.CATEGORY_GENERAL;
+import static net.minecraftforge.common.Configuration.CATEGORY_ITEM;
+
 import java.io.File;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 import traincraft.common.Traincraft;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.ItemIDs;
 
 public class ConfigHandler {
@@ -58,22 +62,22 @@ public class ConfigHandler {
 		try {
 			cf.load();
 			/* General */
-			SOUNDS = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_SOUNDS", true).getBoolean(true);
-			FLICKERING = cf.get(Configuration.CATEGORY_GENERAL, "DISABLE_FLICKERING", true).getBoolean(true);
-			ORE_GEN = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_FUEL_ORES_SPAWN", true).getBoolean(true);
-			COPPER_ORE_GEN = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_COPPER_SPAWN", true).getBoolean(true);
-			ENABLE_ZEPPELIN = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_ZEPPELIN", true).getBoolean(true);
-			ENABLE_STEAM = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_STEAM_TRAINS", true).getBoolean(true);
-			ENABLE_DIESEL = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_DIESEL_TRAINS", true).getBoolean(true);
-			ENABLE_ELECTRIC = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_ELECTRIC_TRAINS", true).getBoolean(true);
-			ENABLE_BUILDER = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_TRACKS_BUILDER", true).getBoolean(true);
-			ENABLE_TENDER = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_TENDERS", true).getBoolean(true);
-			CHUNK_LOADING = cf.get(Configuration.CATEGORY_GENERAL, "ENABLE_CHUNK_LOADING", true).getBoolean(true);
-			TRAINCRAFT_VILLAGER_ID = cf.get(Configuration.CATEGORY_GENERAL, "TRAINCRAFT_VILLAGER_ID", 86).getInt();
-			Property SHOW_POSSIBLE_COLORS_PROP = cf.get(Configuration.CATEGORY_GENERAL, "SHOW_POSSIBLE_TRAINS_COLORS_IN_CHAT", true);
+			SOUNDS = cf.get(CATEGORY_GENERAL, "ENABLE_SOUNDS", true).getBoolean(true);
+			FLICKERING = cf.get(CATEGORY_GENERAL, "DISABLE_FLICKERING", true).getBoolean(true);
+			ORE_GEN = cf.get(CATEGORY_GENERAL, "ENABLE_FUEL_ORES_SPAWN", true).getBoolean(true);
+			COPPER_ORE_GEN = cf.get(CATEGORY_GENERAL, "ENABLE_COPPER_SPAWN", true).getBoolean(true);
+			ENABLE_ZEPPELIN = cf.get(CATEGORY_GENERAL, "ENABLE_ZEPPELIN", true).getBoolean(true);
+			ENABLE_STEAM = cf.get(CATEGORY_GENERAL, "ENABLE_STEAM_TRAINS", true).getBoolean(true);
+			ENABLE_DIESEL = cf.get(CATEGORY_GENERAL, "ENABLE_DIESEL_TRAINS", true).getBoolean(true);
+			ENABLE_ELECTRIC = cf.get(CATEGORY_GENERAL, "ENABLE_ELECTRIC_TRAINS", true).getBoolean(true);
+			ENABLE_BUILDER = cf.get(CATEGORY_GENERAL, "ENABLE_TRACKS_BUILDER", true).getBoolean(true);
+			ENABLE_TENDER = cf.get(CATEGORY_GENERAL, "ENABLE_TENDERS", true).getBoolean(true);
+			CHUNK_LOADING = cf.get(CATEGORY_GENERAL, "ENABLE_CHUNK_LOADING", true).getBoolean(true);
+			TRAINCRAFT_VILLAGER_ID = cf.get(CATEGORY_GENERAL, "TRAINCRAFT_VILLAGER_ID", 86).getInt();
+			Property SHOW_POSSIBLE_COLORS_PROP = cf.get(CATEGORY_GENERAL, "SHOW_POSSIBLE_TRAINS_COLORS_IN_CHAT", true);
 			SHOW_POSSIBLE_COLORS_PROP.comment = "This will disable the chat messages telling you the possible colors when spawning new trains and when coloring them with dye";
 			SHOW_POSSIBLE_COLORS = SHOW_POSSIBLE_COLORS_PROP.getBoolean(true);
-			REAL_TRAIN_SPEED = cf.get(Configuration.CATEGORY_GENERAL, "REAL_TRAIN_SPEED", false).getBoolean(false);
+			REAL_TRAIN_SPEED = cf.get(CATEGORY_GENERAL, "REAL_TRAIN_SPEED", false).getBoolean(false);
 			
 			/* Mysql */
 			Property mysqlEnable = cf.get(CATEGORY_MYSQL, "MYSQL_ENABLE", false);
@@ -83,7 +87,7 @@ public class ConfigHandler {
 			MYSQL_URL = cf.get(CATEGORY_MYSQL, "MYSQL_URL", "some url").getString();
 			MYSQL_USER = cf.get(CATEGORY_MYSQL, "MYSQL_USER", "your username").getString();
 			MYSQL_PASSWORD = cf.get(CATEGORY_MYSQL, "MYSQL_PASSWORD", "your password").getString();
-			
+
 			/* Keys */
 			Traincraft.proxy.setKeyBinding("Horn", cf.get(CATEGORY_KEYS, "KEY_HORN", Key_Horn).getInt());
 			Traincraft.proxy.setKeyBinding("Invent", cf.get(CATEGORY_KEYS, "KEY_INVENT", Key_Invent).getInt());
@@ -92,6 +96,41 @@ public class ConfigHandler {
 			Traincraft.proxy.setKeyBinding("Idle", cf.get(CATEGORY_KEYS, "KEY_IDLE", Key_Idle).getInt());
 			Traincraft.proxy.setKeyBinding("Furnace", cf.get(CATEGORY_KEYS, "KEY_FURN", Key_Furn).getInt());
 
+			/* Blocks */
+			BlockIDs.assemblyTableI.blockID = cf.getBlock(CATEGORY_BLOCK, "block_assemblytableI", 350).getInt(350);
+			BlockIDs.assemblyTableII.blockID = cf.getBlock(CATEGORY_BLOCK, "block_assemblytableII", 351).getInt(351);
+			BlockIDs.assemblyTableIII.blockID = cf.getBlock(CATEGORY_BLOCK, "block_assemblytableIII", 352).getInt(352);
+
+			BlockIDs.distilIdle.blockID = cf.getBlock(CATEGORY_BLOCK, "block_distil", 353).getInt(353);
+			BlockIDs.distilActive.blockID = cf.getBlock(CATEGORY_BLOCK, "block_distil_active", 354).getInt(354);
+			//BlockIDs.signal.blockID = cf.getBlock(CATEGORY_BLOCK, "block_active_signal", 362).getInt(362);
+			
+			BlockIDs.trainWorkbench.blockID = cf.getBlock(CATEGORY_BLOCK, "block_train_workbench", 361).getInt(361);
+			BlockIDs.stopper.blockID = cf.getBlock(CATEGORY_BLOCK, "block_train_buffer", 362).getInt(362);
+
+			BlockIDs.oreTC.blockID = cf.getTerrainBlock(CATEGORY_BLOCK, "block_traincraft_ores", 365, "TC Ores generation (Copper)").getInt(365);
+
+			BlockIDs.openFurnaceIdle.blockID = cf.getBlock(CATEGORY_BLOCK, "block_open_furnace", 363).getInt(363);
+			BlockIDs.openFurnaceActive.blockID = cf.getBlock(CATEGORY_BLOCK, "block_open_furnace_active", 364).getInt(364);
+			BlockIDs.lantern.blockID = cf.getBlock(CATEGORY_BLOCK, "block_lantern", 365).getInt(365);
+			BlockIDs.waterWheel.blockID = cf.getBlock(CATEGORY_BLOCK, "block_water_wheel", 366).getInt(366);
+			BlockIDs.windMill.blockID = cf.getBlock(CATEGORY_BLOCK, "block_wind_mill", 367).getInt(367);
+			BlockIDs.generatorDiesel.blockID = cf.getBlock(CATEGORY_BLOCK, "block_diesel_generator", 368).getInt(368);
+			
+			BlockIDs.diesel.blockID = cf.getBlock(CATEGORY_BLOCK, "block_diesel", 369).getInt(369);
+			BlockIDs.refinedFuel.blockID = cf.getBlock(CATEGORY_BLOCK, "block_refinedFuel", 370).getInt(370);
+			
+			BlockIDs.tcRailGag.blockID = cf.getBlock(CATEGORY_BLOCK, "block_rail_gag", 371).getInt(371);
+			BlockIDs.tcRail.blockID = cf.getBlock(CATEGORY_BLOCK, "block_tc_rail", 372).getInt(372);
+			BlockIDs.bridgePillar.blockID = cf.getBlock(CATEGORY_BLOCK, "block_tc_bridge_pillar", 373).getInt(373);
+			//BlockIDs.book.blockID = cf.getBlock(CATEGORY_BLOCK, "block_book", 371).getInt(371);
+
+			/* Items */
+			int id = 29000;
+			for (ItemIDs items : ItemIDs.values()) {
+				items.itemID = cf.getItem(CATEGORY_ITEM, "item_" + items.name(), id).getInt(id);
+				id++;
+			}
 			
 		} catch (Exception e) {
 			Traincraft.tcLog.severe("Traincraft had a problem loading its configuration\n" + e);

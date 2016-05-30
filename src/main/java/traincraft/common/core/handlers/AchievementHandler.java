@@ -10,7 +10,7 @@ package traincraft.common.core.handlers;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;
 import traincraft.common.library.AchievementIDs;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.ItemIDs;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -21,7 +21,7 @@ public class AchievementHandler {
 	public static AchievementPage tmPage;
 
 	public static void load() {
-		AchievementIDs.trainWB.achievement = new Achievement(20121, "trainWB", 0, 0, BlockIDs.TCBlocksList.block, (Achievement) null).setIndependent().registerAchievement();
+		AchievementIDs.trainWB.achievement = new Achievement(20121, "trainWB", 0, 0, BlockIDs.trainWorkbench.block, (Achievement) null).setIndependent().registerAchievement();
 		AchievementIDs.woodenParts.achievement = new Achievement(20129, "woodenParts", -2, 2, ItemIDs.woodenBogie.item, AchievementIDs.trainWB.achievement).registerAchievement();
 		AchievementIDs.ironParts.achievement = new Achievement(20130, "ironParts", 0, 2, ItemIDs.ironBogie.item, AchievementIDs.trainWB.achievement).registerAchievement();
 		AchievementIDs.steelParts.achievement = new Achievement(20131, "steelParts", 2, 2, ItemIDs.bogie.item, AchievementIDs.trainWB.achievement).registerAchievement();
@@ -32,13 +32,13 @@ public class AchievementHandler {
 		//AchievementIDs.heavySteam.achievement = new Achievement(20109, "heavySteam", 2, 6, ItemIDs.minecartHeavySteam.item, AchievementIDs.firebox.achievement).registerAchievement();
 		//TODO put it back once Heavy Steam is back
 
-		AchievementIDs.openHearth.achievement = new Achievement(20122, "openHearth", -4, 0, BlockIDs.TCBlocksList.block, (Achievement) null).setIndependent().registerAchievement();
+		AchievementIDs.openHearth.achievement = new Achievement(20122, "openHearth", -4, 0, BlockIDs.openFurnaceActive.block, (Achievement) null).setIndependent().registerAchievement();
 		AchievementIDs.steel.achievement = new Achievement(20119, "steel", -4, 2, ItemIDs.steel.item, AchievementIDs.openHearth.achievement).registerAchievement();
 		AchievementIDs.stake.achievement = new Achievement(20118, "stake", -4, 4, ItemIDs.stake.item, AchievementIDs.steel.achievement).registerAchievement();
 		AchievementIDs.dieselEngine.achievement = new Achievement(20115, "dieselEngine", -6, 4, ItemIDs.dieselengine.item, AchievementIDs.steel.achievement).registerAchievement();
 		AchievementIDs.diesel.achievement = new Achievement(20106, "dieselLoco", -6, 6, ItemIDs.minecartCD742.item, AchievementIDs.dieselEngine.achievement).registerAchievement();
 
-		AchievementIDs.distilationTower.achievement = new Achievement(20123, "distilationTower", -10, 0, BlockIDs.TCBlocksList.block, (Achievement) null).setIndependent().registerAchievement();
+		AchievementIDs.distilationTower.achievement = new Achievement(20123, "distilationTower", -10, 0, BlockIDs.distilActive.block, (Achievement) null).setIndependent().registerAchievement();
 		AchievementIDs.dieselFuel.achievement = new Achievement(20113, "dieselFuel", -8, 2, ItemIDs.diesel.item, AchievementIDs.distilationTower.achievement).registerAchievement();
 		AchievementIDs.plastic.achievement = new Achievement(20124, "plastic", -12, 2, ItemIDs.rawPlastic.item, AchievementIDs.distilationTower.achievement).registerAchievement();
 		AchievementIDs.fineCopperWire.achievement = new Achievement(20125, "fineCopperWire", -12, 4, ItemIDs.copperWireFine.item, AchievementIDs.plastic.achievement).registerAchievement();
@@ -50,7 +50,7 @@ public class AchievementHandler {
 
 		AchievementIDs.engineer.achievement = new Achievement(20128, "engineer", -2, -2, ItemIDs.overalls.item, (Achievement) null).setIndependent().registerAchievement();
 
-		AchievementIDs.assemblyTable.achievement = new Achievement(20132, "assemblyTable", 6, 0, BlockIDs.TCBlocksList.block, (Achievement) null).setIndependent().registerAchievement();
+		AchievementIDs.assemblyTable.achievement = new Achievement(20132, "assemblyTable", 6, 0, BlockIDs.assemblyTableI.block, (Achievement) null).setIndependent().registerAchievement();
 		AchievementIDs.passenger.achievement = new Achievement(20102, "passenger", 5, 2, ItemIDs.minecartPassenger2.item, AchievementIDs.assemblyTable.achievement).registerAchievement();
 		AchievementIDs.freight.achievement = new Achievement(20103, "freight", 7, 2, ItemIDs.minecartChest.item, AchievementIDs.assemblyTable.achievement).registerAchievement();
 		AchievementIDs.liquid.achievement = new Achievement(20112, "liquid", 5, 4, ItemIDs.minecartWatertransp.item, AchievementIDs.assemblyTable.achievement).registerAchievement();

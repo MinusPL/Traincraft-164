@@ -23,7 +23,7 @@ import traincraft.common.core.managers.TierRecipe;
 import traincraft.common.core.managers.TierRecipeManager;
 import traincraft.common.inventory.TrainCraftingManager;
 import traincraft.common.items.ItemRollingStock;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.Info;
 import traincraft.common.library.ItemIDs;
 import traincraft.common.recipes.ShapedTrainRecipes;
@@ -70,7 +70,7 @@ public class GuiRecipeBook extends GuiScreen {
 		addPage("Welcome to the Traincraft guide! \n \n" + "This book contains everything you need to know about Traincraft.\n" + "" + "Authors: Spitfire4466, Mrbrutal\n" + "Bukkit port: DV8FromTheWorld.\n" + "\n" + "Modelers: DAYdiecast, helldiver, BlockStormTwo, ChandlerBingUA.\n" + "Thanks to CovertJaguar for his help and a great API.\n", "", "left", new ArrayList<StackToDraw>() {
 			{
 				add(new StackToDraw(new ItemStack(ItemIDs.minecartLocoBR80_DB.item), 20, 16));
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 170, 16));
+				add(new StackToDraw(new ItemStack(BlockIDs.trainWorkbench.block), 170, 16));
 				add(new StackToDraw(new ItemStack(ItemIDs.minecartCabooseWork.item), 60, 175));
 				add(new StackToDraw(new ItemStack(ItemIDs.minecartTankWagon_DB.item), 80, 175));
 				add(new StackToDraw(new ItemStack(ItemIDs.minecartFlatCartRail_DB.item), 100, 175));
@@ -81,8 +81,8 @@ public class GuiRecipeBook extends GuiScreen {
 		});
 		addPage("World generation:\n\n By default, petrol and oil sands will be generated in the world. If you don't want them, open Traincraft.cfg and change the line ENABLE_ORE_SPAWN from true to false." + "Only the new ores will generate, the old ones can be transformed into the new ones in a crafting table.", "", "right", new ArrayList<StackToDraw>() {
 			{ 
-				add(new StackToDraw(new ItemStack(TCBlocksList.oreTC.block, 1, 1), 60, 150));
-				add(new StackToDraw(new ItemStack(TCBlocksList.oreTC.block, 1, 2), 120, 150));
+				add(new StackToDraw(new ItemStack(BlockIDs.oreTC.block, 1, 1), 60, 150));
+				add(new StackToDraw(new ItemStack(BlockIDs.oreTC.block, 1, 2), 120, 150));
 			}
 		});
 
@@ -258,16 +258,16 @@ public class GuiRecipeBook extends GuiScreen {
 		});
 		addPage("Crafting:\n" + "All train parts are crafted in the train workbench,\n\n" + "then trains have to be assembled in the assembly tables.\n\n" + "There are three assembly tables:\n\n" + "TierI - Iron age\n" + "TierII - Steel age\n" + "TierIII - Advanced age\n", "", "left", new ArrayList<StackToDraw>() {
 			{
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 20, 16));
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 40, 165));
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 80, 165));
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 140, 165));
+				add(new StackToDraw(new ItemStack(BlockIDs.trainWorkbench.block), 20, 16));
+				add(new StackToDraw(new ItemStack(BlockIDs.assemblyTableI.block), 40, 165));
+				add(new StackToDraw(new ItemStack(BlockIDs.assemblyTableII.block), 80, 165));
+				add(new StackToDraw(new ItemStack(BlockIDs.assemblyTableIII.block), 140, 165));
 			}
 		});
 		addPage("Crafting steel:\n" + "Steel is now crafted in Open Hearth Furnace, supply iron ingots and graphite in the top slots, fuel in the bottom slot \n" + "and it will cook slowly into steel.\n" + "You can also use steel from other mods or use this steel in other mods.\n", "", "right", new ArrayList<StackToDraw>() {
 			{
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 20, 16));
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 80, 155));
+				add(new StackToDraw(new ItemStack(BlockIDs.openFurnaceIdle.block), 20, 16));
+				add(new StackToDraw(new ItemStack(BlockIDs.openFurnaceActive.block), 80, 155));
 				add(new StackToDraw(new ItemStack(ItemIDs.graphite.item), 70, 135));
 				add(new StackToDraw(new ItemStack(Item.ingotIron), 90, 135));
 				add(new StackToDraw(new ItemStack(Item.coal), 80, 175));
@@ -277,9 +277,9 @@ public class GuiRecipeBook extends GuiScreen {
 
 		addPage("Making diesel:\n" + "Diesel is made in a distillation tower using petroleum or oil sands found in the world.\n" + "Insert petroleum in the top slot and fuel in the bottom slot, also try reed.\n" + "It will cook into liquid diesel and give you plastic with a random chance depending on the input.\n" + "To get diesel into canisters, you must first craft them using plastic. Then put an empty one in the top right slot.", "", "left", new ArrayList<StackToDraw>() {
 			{
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 20, 16));
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 150, 40));
-				add(new StackToDraw(new ItemStack(TCBlocksList.oreTC.block, 1, 1), 150, 20));
+				add(new StackToDraw(new ItemStack(BlockIDs.distilIdle.block), 20, 16));
+				add(new StackToDraw(new ItemStack(BlockIDs.distilActive.block), 150, 40));
+				add(new StackToDraw(new ItemStack(BlockIDs.oreTC.block, 1, 1), 150, 20));
 				add(new StackToDraw(new ItemStack(Item.coal), 150, 60));
 				add(new StackToDraw(new ItemStack(ItemIDs.diesel.item), 167, 40));
 				add(new StackToDraw(new ItemStack(ItemIDs.rawPlastic.item), 182, 40));
@@ -340,8 +340,8 @@ public class GuiRecipeBook extends GuiScreen {
 				"" +
 				"","","right",new ArrayList<StackToDraw>() {
 					{
-						add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block, 1, 4), 20, 16));
-						add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block, 1, 4), 170, 16));
+						add(new StackToDraw(new ItemStack(BlockIDs.windMill.block, 1, 4), 20, 16));
+						add(new StackToDraw(new ItemStack(BlockIDs.waterWheel.block, 1, 4), 170, 16));
 					}
 				});
 		addPage("Villager\n" +
@@ -377,7 +377,7 @@ public class GuiRecipeBook extends GuiScreen {
 				"","","left",new ArrayList<StackToDraw>() {
 					{
 						add(new StackToDraw(new ItemStack(ItemIDs.minecartTankWagon_DB.item), 20, 16));
-						add(new StackToDraw(new ItemStack(TCBlocksList.oreTC.block), 170, 16));
+						add(new StackToDraw(new ItemStack(BlockIDs.oreTC.block), 170, 16));
 						add(new StackToDraw(new ItemStack(ItemIDs.minecartCaboose3.item), 40, 155));
 						add(new StackToDraw(new ItemStack(ItemIDs.minecartFreightWellcar.item), 60, 155));
 						add(new StackToDraw(new ItemStack(ItemIDs.minecartOpenWagon.item), 80, 155));
@@ -389,7 +389,7 @@ public class GuiRecipeBook extends GuiScreen {
 		
 		addPage("On the next pages you will find all the train workbench recipes and assembly table recipes.\n" + "It is however strongly suggested to try to discover the recipes by yourself...\n\n" + "We hope you will enjoy the mod!\n\n" + "Spitfire4466 and MrBrutal", "", "right", new ArrayList<StackToDraw>() {
 			{
-				add(new StackToDraw(new ItemStack(BlockIDs.TCBlocksList.block), 20, 16));
+				add(new StackToDraw(new ItemStack(BlockIDs.trainWorkbench.block), 20, 16));
 				add(new StackToDraw(new ItemStack(ItemIDs.hat.item), 40, 155));
 				add(new StackToDraw(new ItemStack(ItemIDs.jacket.item), 90, 155));
 				add(new StackToDraw(new ItemStack(ItemIDs.overalls.item), 140, 155));

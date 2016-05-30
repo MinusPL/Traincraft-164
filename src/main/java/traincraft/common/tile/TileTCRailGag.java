@@ -4,12 +4,10 @@ import java.util.Random;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-import traincraft.common.Traincraft;
 import traincraft.common.core.handlers.PacketHandler;
-import traincraft.common.core.handlers.packet.getTEPClient;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileTCRailGag extends TileEntity {
 	protected Random rand = new Random();
@@ -42,7 +40,7 @@ public class TileTCRailGag extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return Traincraft.network.getPacketFrom(new getTEPClient(this));
+		return PacketHandler.getTEPClient(this);
 	}
 
 	public void handlePacketDataFromServer(String type, int bbHeight) {

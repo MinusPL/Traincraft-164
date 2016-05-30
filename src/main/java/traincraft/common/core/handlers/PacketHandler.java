@@ -17,9 +17,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -59,8 +59,75 @@ public class PacketHandler implements IPacketHandler {
 	protected RollingStockStatsEventHandler statsEventHandler = new RollingStockStatsEventHandler();
 
 	@Override
-
-		if (packetIndex == 1) {
+	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+		int packetIndex = data.readInt();
+		World world = ((EntityPlayer) player).worldObj;
+		if (packetIndex == 0) {
+			int x = data.readInt();
+			int y = data.readInt();
+			int z = data.readInt();
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if (te instanceof TileTrainWbench) {
+				byte orientation = data.readByte();
+				((TileTrainWbench) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileCrafterTierIII) {
+				byte orientation = data.readByte();
+				((TileCrafterTierIII) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileCrafterTierII) {
+				byte orientation = data.readByte();
+				((TileCrafterTierII) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileCrafterTierI) {
+				byte orientation = data.readByte();
+				((TileCrafterTierI) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileStopper) {
+				byte orientation = data.readByte();
+				((TileStopper) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileBook) {
+				byte orientation = data.readByte();
+				((TileBook) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileSignal) {
+				byte orientation = data.readByte();
+				((TileSignal) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileLantern) {
+				int color = data.readInt();
+				((TileLantern) te).handlePacketDataFromServer(color);
+			}
+			if (te instanceof TileWaterWheel) {
+				byte orientation = data.readByte();
+				((TileWaterWheel) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileWindMill) {
+				byte orientation = data.readByte();
+				int wind = data.readInt();
+				((TileWindMill) te).handlePacketDataFromServer(orientation, wind);
+			}
+			if (te instanceof TileGeneratorDiesel) {
+				byte orientation = data.readByte();
+				((TileGeneratorDiesel) te).handlePacketDataFromServer(orientation);
+			}
+			if (te instanceof TileTCRail) {
+				byte orientation = data.readByte();
+				String type = data.readUTF();
+				boolean hasModel = data.readBoolean();
+				boolean switchActive = data.readBoolean();
+				int idDrop = data.readInt();
+				((TileTCRail) te).handlePacketDataFromServer(orientation, type, hasModel, switchActive, idDrop);
+			}
+			if (te instanceof TileTCRailGag) {
+				String type = data.readUTF();
+				int bbHeight = data.readInt();
+				((TileTCRailGag) te).handlePacketDataFromServer(type, bbHeight);
+			}
+		}
+		else if (packetIndex == 1) {
 			int x = data.readInt();
 			int y = data.readInt();
 			int z = data.readInt();
@@ -243,6 +310,151 @@ public class PacketHandler implements IPacketHandler {
 
 	private Entity getEntityByID(int par1, Player player) {
 		return (Entity) (par1 == ((EntityPlayer) player).entityId ? player : ((EntityPlayer) player).worldObj.getEntityByID(par1));
+	}
+
+	public static Packet getTEPClient(TileEntity te) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(bos);
+		try {
+			if (te != null && te instanceof TileTrainWbench) {
+				TileTrainWbench tem = (TileTrainWbench) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing().ordinal());
+			}
+			if (te != null && te instanceof TileCrafterTierIII) {
+				TileCrafterTierIII tem = (TileCrafterTierIII) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing().ordinal());
+			}
+			if (te != null && te instanceof TileCrafterTierII) {
+				TileCrafterTierII tem = (TileCrafterTierII) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing().ordinal());
+			}
+			if (te != null && te instanceof TileCrafterTierI) {
+				TileCrafterTierI tem = (TileCrafterTierI) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing().ordinal());
+			}
+			if (te != null && te instanceof TileEntityDistil) {
+				TileEntityDistil tem = (TileEntityDistil) te;
+				dos.writeInt(1);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing().ordinal());
+				dos.writeShort(tem.distilCookTime);
+				dos.writeShort(tem.distilBurnTime);
+				dos.writeShort(tem.amount);
+				dos.writeShort(tem.liquidItemID);
+			}
+			if (te != null && te instanceof TileEntityOpenHearthFurnace) {
+				TileEntityOpenHearthFurnace tem = (TileEntityOpenHearthFurnace) te;
+				dos.writeInt(1);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing().ordinal());
+				dos.writeShort(tem.furnaceCookTime);
+				dos.writeShort(tem.furnaceBurnTime);
+			}
+			if (te != null && te instanceof TileStopper) {
+				TileStopper tem = (TileStopper) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing());
+			}
+			if (te != null && te instanceof TileBook) {
+				TileBook tem = (TileBook) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing());
+			}
+			if (te != null && te instanceof TileSignal) {
+				TileSignal tem = (TileSignal) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing());
+			}
+			if (te != null && te instanceof TileLantern) {
+				TileLantern tem = (TileLantern) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeInt(tem.randomColor);
+			}
+			if (te != null && te instanceof TileWaterWheel) {
+				TileWaterWheel tem = (TileWaterWheel) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing());
+			}
+			if (te != null && te instanceof TileWindMill) {
+				TileWindMill tem = (TileWindMill) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing());
+				dos.writeInt(ServerTickHandler.windStrength);
+			}
+			if (te != null && te instanceof TileGeneratorDiesel) {
+				TileGeneratorDiesel tem = (TileGeneratorDiesel) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing());
+			}
+			if (te != null && te instanceof TileTCRail) {
+				TileTCRail tem = (TileTCRail) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeByte(tem.getFacing());
+				dos.writeUTF(tem.getType());
+				dos.writeBoolean(tem.hasModel);
+				dos.writeBoolean(tem.getSwitchState());
+				dos.writeInt(tem.idDrop);
+			}
+			if (te != null && te instanceof TileTCRailGag) {
+				TileTCRailGag tem = (TileTCRailGag) te;
+				dos.writeInt(0);
+				dos.writeInt(tem.xCoord);
+				dos.writeInt(tem.yCoord);
+				dos.writeInt(tem.zCoord);
+				dos.writeUTF(tem.type);
+				dos.writeInt((int) (tem.bbHeight * 1000));
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload(Info.channel, bos.toByteArray());
+		packet.length = bos.size();
+		return packet;
 	}
 
 	public static Packet setDistilLiquid(TileEntity te) {

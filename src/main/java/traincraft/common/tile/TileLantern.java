@@ -3,14 +3,11 @@ package traincraft.common.tile;
 import java.util.Random;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-import traincraft.common.Traincraft;
 import traincraft.common.core.handlers.PacketHandler;
-import traincraft.common.core.handlers.packet.getTEPClient;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileLantern extends TileEntity {
 	protected Random rand = new Random();
@@ -31,7 +28,7 @@ public class TileLantern extends TileEntity {
 	
 	@Override
 	public Packet getDescriptionPacket() {
-		return Traincraft.network.getPacketFrom(new getTEPClient(this));
+		return PacketHandler.getTEPClient(this);
 	}
 	
 	public void handlePacketDataFromServer(int color) {
@@ -41,9 +38,8 @@ public class TileLantern extends TileEntity {
 		 * if the color is received server side then send it to the client. This situation happens when the color is set in the GUI
 		 * Color has to pass through the server to be registered
 		 */
-		if(side == Side.SERVER)
-		{
-			Traincraft.network.sendToAllAround(new getTEPClient(this), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 12D));
+		if(side== Side.SERVER) {
+			PacketHandler.sendPacketToClients(PacketHandler.getTEPClient(this), worldObj, this.xCoord, this.yCoord, this.zCoord, 12D);
 		}
 	}
 	

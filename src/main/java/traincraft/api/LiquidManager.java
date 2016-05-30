@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import traincraft.common.Traincraft;
 import traincraft.common.blocks.BlockTraincraftFluid;
 import traincraft.common.items.ItemBlockFluid;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.ItemIDs;
 import buildcraft.api.fuels.IronEngineFuel;
 import cpw.mods.fml.relauncher.Side;
@@ -52,10 +52,10 @@ public class LiquidManager {
 	public void registerLiquids() {
 		FluidRegistry.registerFluid(DIESEL);
 		FluidRegistry.registerFluid(REFINED_FUEL);
-		BlockIDs.TCBlocksList.block = new BlockTraincraftFluid(BlockIDs.TCBlocksList.blockID, DIESEL, Material.water).setFlammable(true).setFlammability(5);
-		DIESEL.setBlockID(BlockIDs.TCBlocksList.block);
-		BlockIDs.TCBlocksList.block = new BlockTraincraftFluid(BlockIDs.TCBlocksList.blockID, REFINED_FUEL, Material.water).setFlammable(true).setFlammability(4);
-		REFINED_FUEL.setBlockID(BlockIDs.TCBlocksList.block);
+		BlockIDs.diesel.block = new BlockTraincraftFluid(BlockIDs.diesel.blockID, DIESEL, Material.water).setFlammable(true).setFlammability(5);
+		DIESEL.setBlockID(BlockIDs.diesel.block);
+		BlockIDs.refinedFuel.block = new BlockTraincraftFluid(BlockIDs.refinedFuel.blockID, REFINED_FUEL, Material.water).setFlammable(true).setFlammability(4);
+		REFINED_FUEL.setBlockID(BlockIDs.refinedFuel.block);
 		FluidContainerRegistry.registerFluidContainer(DIESEL, new ItemStack(ItemIDs.diesel.item), new ItemStack(ItemIDs.emptyCanister.item));
 		FluidContainerRegistry.registerFluidContainer(REFINED_FUEL, new ItemStack(ItemIDs.refinedFuel.item), new ItemStack(ItemIDs.emptyCanister.item));
 		dieselFilter();
@@ -65,16 +65,16 @@ public class LiquidManager {
 		IronEngineFuel.addFuel(REFINED_FUEL, 6, 100000);
 		MinecraftForge.EVENT_BUS.register(this);
 
-		Traincraft.proxy.registerBlock(BlockIDs.TCBlocksList.block, ItemBlockFluid.class);
-		Traincraft.proxy.registerBlock(BlockIDs.TCBlocksList.block, ItemBlockFluid.class);
+		Traincraft.proxy.registerBlock(BlockIDs.diesel.block, ItemBlockFluid.class);
+		Traincraft.proxy.registerBlock(BlockIDs.refinedFuel.block, ItemBlockFluid.class);
 	}
 
 	@ForgeSubscribe
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Post event) {
 		if (event.map.textureType == 0) {
-			DIESEL.setIcons(BlockIDs.TCBlocksList.block.getBlockTextureFromSide(1), BlockIDs.TCBlocksList.block.getBlockTextureFromSide(2));
-			REFINED_FUEL.setIcons(BlockIDs.TCBlocksList.block.getBlockTextureFromSide(1), BlockIDs.TCBlocksList.block.getBlockTextureFromSide(2));
+			DIESEL.setIcons(BlockIDs.diesel.block.getBlockTextureFromSide(1), BlockIDs.diesel.block.getBlockTextureFromSide(2));
+			REFINED_FUEL.setIcons(BlockIDs.refinedFuel.block.getBlockTextureFromSide(1), BlockIDs.refinedFuel.block.getBlockTextureFromSide(2));
 		}
 	}
 

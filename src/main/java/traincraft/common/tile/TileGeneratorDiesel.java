@@ -10,22 +10,21 @@ package traincraft.common.tile;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
-import ic2.api.energy.tile.IEnergyTile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import buildcraft.api.tiles.IHasWork;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -34,17 +33,16 @@ import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 import traincraft.api.LiquidManager;
 import traincraft.api.LiquidManager.StandardTank;
-import traincraft.common.Traincraft;
 import traincraft.common.core.handlers.PacketHandler;
-import traincraft.common.core.handlers.packet.getTEPClient;
 import traincraft.common.library.Info;
+import buildcraft.api.power.IPowerEmitter;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerHandler;
+import buildcraft.api.power.PowerHandler.PowerReceiver;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyReceiver;
 
-public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection, IHasWork,IFluidHandler, IInventory, IEnergySource
-{
+public class TileGeneratorDiesel extends TileEntity implements IPowerReceptor,IPowerEmitter,IFluidHandler, IInventory, IEnergySource{
 
 	private int facingMeta;
 	public float energy;
@@ -54,6 +52,8 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 	public float currentOutput = 0.0F;
 	private static final float OUTPUT_MJ = 8.0F;
 	private ForgeDirection direction = ForgeDirection.UNKNOWN;
+	//private IPowerProvider provider;
+	private PowerHandler provider = new PowerHandler(this, PowerHandler.Type.ENGINE);
 	private int maxTank = 0;
 	private StandardTank theTank;
 	private IFluidTank[] tankArray = new IFluidTank[1];
@@ -71,11 +71,10 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 	public boolean addedToEnergyNet = false;
 	public int IC2production = 0;
 
-	public TileGeneratorDiesel()
-	{
+	public TileGeneratorDiesel() {
 		facingMeta = this.blockMetadata;
-		/*this.provider.configure(2.0F, maxEnergyReceived(), 1.0F, maxEnergy());
-		this.provider.configurePowerPerdition(1, 100);*/
+		this.provider.configure(2.0F, maxEnergyReceived(), 1.0F, maxEnergy());
+		this.provider.configurePowerPerdition(1, 100);
 		this.liquid = new FluidStack(0, 0);
 		this.maxTank = 30000;
 		this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, LiquidManager.getInstance().dieselFilter(), 1);
@@ -91,10 +90,8 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		direction = ForgeDirection.getOrientation(facing);
 	}
 	@Override
-	public void onChunkUnload()
-	{
-		if ((isSimulating()) && (this.addedToEnergyNet))
-		{
+	public void onChunkUnload() {
+		if ((isSimulating()) && (this.addedToEnergyNet)) {
 			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
 			this.addedToEnergyNet = false;
 		}
@@ -110,24 +107,21 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 	 * IC2
 	 */
 	@Override
-	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction)
-	{
+	public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction) {
 		return true;
 	}
 	/**
 	 * IC2
 	 */
 	@Override
-	public double getOfferedEnergy()
-	{
+	public double getOfferedEnergy() {
 		return this.IC2production;
 	}
 	/**
 	 * IC2
 	 */
 	@Override
-	public void drawEnergy(double amount)
-	{
+	public void drawEnergy(double amount) {
 		extractEnergy((float)amount, (float)amount, true);
 	}
 	
@@ -144,16 +138,17 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		if(!worldObj.isRemote){
 			IC2production = (int) (currentOutput*2.5);
 			
+			this.provider.update();
 			ArrayList<TileEntity> tile = new ArrayList<TileEntity>();
-			tile.add(0, worldObj.getTileEntity(xCoord+1, yCoord, zCoord));
-			tile.add(1,worldObj.getTileEntity(xCoord-1, yCoord, zCoord));
-			tile.add(2,worldObj.getTileEntity(xCoord, yCoord-1, zCoord));
-			tile.add(3,worldObj.getTileEntity(xCoord, yCoord+1, zCoord));
-			tile.add(4,worldObj.getTileEntity(xCoord, yCoord, zCoord-1));
-			tile.add(5,worldObj.getTileEntity(xCoord, yCoord, zCoord+1));
+			tile.add(0, worldObj.getBlockTileEntity(xCoord+1, yCoord, zCoord));
+			tile.add(1,worldObj.getBlockTileEntity(xCoord-1, yCoord, zCoord));
+			tile.add(2,worldObj.getBlockTileEntity(xCoord, yCoord-1, zCoord));
+			tile.add(3,worldObj.getBlockTileEntity(xCoord, yCoord+1, zCoord));
+			tile.add(4,worldObj.getBlockTileEntity(xCoord, yCoord, zCoord-1));
+			tile.add(5,worldObj.getBlockTileEntity(xCoord, yCoord, zCoord+1));
 			for(int t = 0;t<tile.size();t++){
-				if(tile.get(t) !=null && tile.get(t) instanceof IEnergyReceiver){
-					IEnergyReceiver receiver = (IEnergyReceiver)tile.get(t);
+				if(tile.get(t) !=null && tile.get(t) instanceof IPowerReceptor){
+					IPowerReceptor receptor = (IPowerReceptor)tile.get(t);
 					ForgeDirection dir = ForgeDirection.UNKNOWN;
 					if(t==0)dir = ForgeDirection.EAST;
 					if(t==1)dir = ForgeDirection.WEST;
@@ -162,23 +157,15 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 					if(t==4)dir = ForgeDirection.NORTH;
 					if(t==5)dir = ForgeDirection.SOUTH;
 					
-					
-					
-					if (canTileReceiveEnergy((TileEntity) receiver, dir))
-					{
-						/*float extracted = getPowerToExtract((TileEntity) receiver,dir);
-						if (extracted > 0)
-						{
-							float needed = receiver1.receiveEnergy(PowerHandler.Type.ENGINE, extracted, dir.getOpposite());
-							extractEnergy(receiver1.getMinEnergyReceived(), needed, true); // Comment out for constant power
+					if (isPoweredTile((TileEntity) receptor, dir)) {
+						PowerReceiver receptor1 = ((IPowerReceptor) tile.get(t)).getPowerReceiver(dir.getOpposite());
+
+						float extracted = getPowerToExtract((TileEntity) receptor,dir);
+						if (extracted > 0) {
+							float needed = receptor1.receiveEnergy(PowerHandler.Type.ENGINE, extracted, dir.getOpposite());
+							extractEnergy(receptor1.getMinEnergyReceived(), needed, true); // Comment out for constant power
 							//currentOutput = extractEnergy(0, needed, true); // Uncomment for constant power
 							this.IC2production=0;//if a bc pipe is drawing energy, do not output IC2
-						}*/
-						float extracted = getPowerToExtract();
-						if(extracted > 0)
-						{
-							receiver.receiveEnergy(dir, (int)extracted, false);
-							this.IC2production=0;
 						}
 					}
 				}
@@ -186,37 +173,17 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 			burn();
 		}
 	}
-	
-	/*Just for 1.7.10 compatibility it will extract constant amount of energy*/
-	public float getPowerToExtract()
-	{
-        int amount = maxEnergyExtracted();
-        if (energy >= amount) {
-            energy -= amount;
-            return amount;
-        }
-        float returnValue = energy;
-        energy = 0;
-        return returnValue;
-	}
-	
-	/*private float getPowerToExtract(TileEntity tile,ForgeDirection dir)
-	{
+	private float getPowerToExtract(TileEntity tile,ForgeDirection dir) {
 		PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(dir.getOpposite());
 		return extractEnergy(receptor.getMinEnergyReceived(), receptor.getMaxEnergyReceived(), false); // Comment out for constant power
 		//		return extractEnergy(0, getActualOutput(), false); // Uncomment for constant power
-	}*/
-	
-	public boolean canTileReceiveEnergy(TileEntity tile, ForgeDirection side)
-	{
-		if (tile instanceof IEnergyReceiver)
-		{
-			IEnergyReceiver receiver = (IEnergyReceiver) tile;
-			return receiver.canConnectEnergy(side);
-		}
+	}
+	public boolean isPoweredTile(TileEntity tile, ForgeDirection side) {
+		if (tile instanceof IPowerReceptor)
+			return ((IPowerReceptor) tile).getPowerReceiver(side.getOpposite()) != null;
+
 		return false;
 	}
-	
 	public void burn()
 	{
 		this.update += 1;
@@ -230,10 +197,8 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 			}
 			if(this.theTank.getFluid()!=null){
 				amount = this.theTank.getFluid().amount;
-				this.liquidItemID = this.theTank.getFluid().getFluidID();
-			}
-			else
-			{
+				this.liquidItemID = this.theTank.getFluid().fluidID;
+			}else{
 				amount = 0;
 				this.liquidItemID=0;
 			}
@@ -251,8 +216,6 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		}
 		this.currentOutput = ((this.currentOutput * 74.0F + output) / 75.0F);
 	}
-	
-	
 	public static Packet setGeneratorLiquid(TileEntity te) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
@@ -274,8 +237,6 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		packet.length = bos.size();
 		return packet;
 	}
-	
-	
 	public void handlePacketDataFromServer(boolean isProducing,short amount, short liquidID) {
 		this.setIsProducing(isProducing);
 		this.amountClient = (int) amount;
@@ -303,14 +264,19 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return Traincraft.network.getPacketFrom(new getTEPClient(this));
+		return PacketHandler.getTEPClient(this);
 	}
 
-	public void handlePacketDataFromServer(int orientation) {
+	public void handlePacketDataFromServer(byte orientation) {
 		facingMeta = orientation;
 	}
 
-	/*@Override
+	public PowerHandler.PowerReceiver getPowerReceiver(ForgeDirection side)
+	{
+		return this.provider.getPowerReceiver();
+	}
+
+	@Override
 	public void doWork(PowerHandler workProvider)
 	{
 		if (isNotHost(this.worldObj))
@@ -318,35 +284,28 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		float e = this.provider.useEnergy(1.0F, maxEnergyReceived(), true) * 0.95F;
 		this.extraEnergy += e;
 		addEnergy(e);
-	}*/
-	
+	}
 	public static boolean isNotHost(World world) {
 		return world.isRemote;
 	}
-	
 	public float getEnergy() {
 		return this.energy;
 	}
 	public float getCurrentOutput() {
 		return this.currentOutput;
 	}
-	
 	public boolean isPowered(){
 		return powered;
 	}
-	
 	public void setIsPowered(boolean power){
 		powered = power;
 	}
-	
 	public boolean isProducing(){
 		return producing ;
 	}
-	
 	public void setIsProducing(boolean producing){
 		this.producing = producing;
 	}
-	
 	public void addEnergy(float addition) {
 		this.energy += addition;
 
@@ -360,9 +319,7 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		if (this.energy < 0.0F)
 			this.energy = 0.0F;
 	}
-	
-	public float extractEnergy(float min, float max, boolean doExtract)
-	{
+	public float extractEnergy(float min, float max, boolean doExtract) {
 		if (this.energy < min) {
 			return 0.0F;
 		}
@@ -447,7 +404,7 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 				dieselItemStacks[i] = itemstack1;
 			return true;
 		}
-		else if (dieselItemStacks[i] != null && dieselItemStacks[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || dieselItemStacks[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(dieselItemStacks[i], itemstack1)) {
+		else if (dieselItemStacks[i] != null && dieselItemStacks[i].itemID == itemstack1.itemID && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || dieselItemStacks[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(dieselItemStacks[i], itemstack1)) {
 			int var9 = dieselItemStacks[i].stackSize + itemstack1.stackSize;
 			if (var9 <= itemstack1.getMaxStackSize()) {
 				if (doAdd)
@@ -513,7 +470,7 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getInvName() {
 		return "Diesel Generator";
 	}
 	@Override
@@ -524,19 +481,19 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		if (worldObj == null) {
 			return true;
 		}
-		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
 	}
 	@Override
-	public void openInventory() {}
+	public void openChest() {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeChest() {}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean isInvNameLocalized() {
 		return false;
 	}
 
@@ -545,10 +502,10 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 		return true;
 	}
 
-	/*@Override
+	@Override
 	public World getWorld() {
 		return this.worldObj;
-	}*/
+	}
 
 	public FluidStack getFluid()
 	{
@@ -587,39 +544,23 @@ public class TileGeneratorDiesel extends TileEntity implements IEnergyConnection
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection side)
-	{
+	public boolean canEmitPowerFrom(ForgeDirection side) {
 		return true;
 	}
-	
-	//need check in 4.2.1
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return false;
+		return true;
 	}
 
-	//need check in 4.2.1
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from)
 	{
 		return new FluidTankInfo[] { theTank.getInfo() };
-	}
-
-	@Override
-	public int getSourceTier()
-	{
-		return 1;
-	}
-
-	@Override
-	public boolean hasWork()
-	{
-		return false;
 	}
 
 }

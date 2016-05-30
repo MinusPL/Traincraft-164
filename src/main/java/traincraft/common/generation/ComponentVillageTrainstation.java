@@ -19,7 +19,7 @@ import traincraft.common.entity.rollingStock.EntityFreightCartSmall;
 import traincraft.common.entity.rollingStock.EntityFreightWood2;
 import traincraft.common.entity.rollingStock.EntityPassenger2;
 import traincraft.common.entity.rollingStock.EntityStockCar;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 
 public class ComponentVillageTrainstation extends ComponentVillage {
 
@@ -116,9 +116,9 @@ public class ComponentVillageTrainstation extends ComponentVillage {
 		this.fillWithBlocks(world, structureboundingbox, 1, 4, 6, 7, 4, 6, Block.woodSingleSlab.blockID, Block.woodSingleSlab.blockID, false);
 		this.fillWithBlocks(world, structureboundingbox, 1, 4, 8, 7, 4, 8, Block.woodSingleSlab.blockID, Block.woodSingleSlab.blockID, false);
 		this.placeBlockAtCurrentPosition(world, Block.fence.blockID, 0, 0, 1, 6, structureboundingbox);
-		this.placeBlockAtCurrentPosition(world, BlockIDs.TCBlocksList.blockID, 0, 0, 2, 6, structureboundingbox);
+		this.placeBlockAtCurrentPosition(world, BlockIDs.lantern.blockID, 0, 0, 2, 6, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Block.fence.blockID, 0, 8, 1, 6, structureboundingbox);
-		this.placeBlockAtCurrentPosition(world, BlockIDs.TCBlocksList.blockID, 0, 8, 2, 6, structureboundingbox);
+		this.placeBlockAtCurrentPosition(world, BlockIDs.lantern.blockID, 0, 8, 2, 6, structureboundingbox);
 
 		this.placeBlockAtCurrentPosition(world, Block.thinGlass.blockID, 0, 5, 2, 5, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Block.thinGlass.blockID, 0, 6, 2, 5, structureboundingbox);
@@ -128,8 +128,8 @@ public class ComponentVillageTrainstation extends ComponentVillage {
 		this.fillWithBlocks(world, structureboundingbox, 5, 3, 5, 6, 3, 5, Block.thinGlass.blockID, Block.thinGlass.blockID, false);
 
 		this.fillWithBlocks(world, structureboundingbox, 4, 3, 3, 7, 3, 3, Block.fenceIron.blockID, Block.fenceIron.blockID, false);
-		this.placeBlockAtCurrentPosition(world, BlockIDs.TCBlocksList.blockID, 0, 7, 4, 3, structureboundingbox);
-		this.placeBlockAtCurrentPosition(world, BlockIDs.TCBlocksList.blockID, 0, 4, 4, 3, structureboundingbox);
+		this.placeBlockAtCurrentPosition(world, BlockIDs.lantern.blockID, 0, 7, 4, 3, structureboundingbox);
+		this.placeBlockAtCurrentPosition(world, BlockIDs.lantern.blockID, 0, 4, 4, 3, structureboundingbox);
 
 		this.placeBlockAtCurrentPosition(world, Block.fenceIron.blockID, 0, 4, 2, 3, structureboundingbox);
 		this.fillWithBlocks(world, structureboundingbox, 4, 1, 3, 7, 1, 3, Block.fenceIron.blockID, Block.fenceIron.blockID, false);
@@ -148,7 +148,7 @@ public class ComponentVillageTrainstation extends ComponentVillage {
 		this.placeBlockAtCurrentPosition(world, Block.stairsWoodOak.blockID, k, 2, 1, 4, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Block.fence.blockID, 0, 2, 1, 3, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Block.pressurePlatePlanks.blockID, 0, 2, 2, 3, structureboundingbox);
-		this.placeBlockAtCurrentPosition(world, BlockIDs.TCBlocksList.blockID, 0, 7, 1, 1, structureboundingbox);
+		this.placeBlockAtCurrentPosition(world, BlockIDs.trainWorkbench.blockID, 0, 7, 1, 1, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, 0, 0, 1, 1, 0, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, 0, 0, 1, 2, 0, structureboundingbox);
 		this.placeDoorAtCurrentPosition(world, structureboundingbox, random, 1, 1, 0, this.getMetadataWithOffset(Block.doorWood.blockID, 1));

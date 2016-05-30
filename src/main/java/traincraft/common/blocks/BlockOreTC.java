@@ -6,37 +6,32 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import traincraft.common.Traincraft;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.Info;
-import traincraft.common.library.TCBlocksList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockOreTC extends BlockSand
-{
+public class BlockOreTC extends BlockSand {
 
-	private static IIcon texture1;
-	private static IIcon texture2;
-	private static IIcon texture3;
-	private static IIcon texture4;
+	private static Icon texture1;
+	private static Icon texture2;
+	private static Icon texture3;
+	private static Icon texture4;
 
-	public BlockOreTC()
-	{
-		super();
+	public BlockOreTC(int id, int tex) {
+		super(id, Material.rock);
 		setCreativeTab(Traincraft.tcTab);
-		setStepSound(soundTypeStone);
 	}
 
 	@Override
-	public IIcon getIcon(int side, int metadata) {
+	public Icon getIcon(int side, int metadata) {
 		if (metadata == 0) {
 			return texture1;
 		}
@@ -51,16 +46,14 @@ public class BlockOreTC extends BlockSand
 	}
 
 	@Override
-	public int damageDropped(int metadata)
-	{
+	public int damageDropped(int metadata) {
 		return metadata;
 	}
 
 	@Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
-    {
-        return Item.getItemFromBlock(this);
-    }
+	public int idDropped(int i, Random random, int j) {
+		return blockID;
+	}
 
 	@Override
 	public int quantityDropped(Random random) {
@@ -68,30 +61,29 @@ public class BlockOreTC extends BlockSand
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z)
-	{
-		if (this == TCBlocksList.oreTC.block && world.getBlockMetadata(x, y, z) == 1)
-		{
-			world.scheduleBlockUpdate(x, y, z, this, 5);
+	public void onBlockAdded(World world, int x, int y, int z) {
+		if (this.blockID == BlockIDs.oreTC.blockID && world.getBlockMetadata(x, y, z) == 1) {
+			world.scheduleBlockUpdate(x, y, z, this.blockID, 5);
 		}
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block par5) {
-		if (this == TCBlocksList.oreTC.block && world.getBlockMetadata(x, y, z) == 1) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {
+		if (this.blockID == BlockIDs.oreTC.blockID && world.getBlockMetadata(x, y, z) == 1) {
 			if (!world.isRemote) {
 				tryToFall(world, x, y, z);
-				world.scheduleBlockUpdate(x, y, z, this, 5);
+				world.scheduleBlockUpdate(x, y, z, this.blockID, 5);
 			}
 		}
 	}
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random par5Random) {
-		if (this == TCBlocksList.oreTC.block && world.getBlockMetadata(x, y, z) == 1) {
-			if (!world.isRemote) 
-			{
-				tryToFall(world, x, y, z);
+		if (this.blockID == BlockIDs.oreTC.blockID && world.getBlockMetadata(x, y, z) == 1) {
+			if (!world.isRemote) {
+				if (world.getBlockId(x, y - 1, z) == 0) {
+					tryToFall(world, x, y, z);
+				}
 			}
 		}
 	}
@@ -102,16 +94,15 @@ public class BlockOreTC extends BlockSand
 			if (canFallBelow(world, x, y - 1, z) && y >= 0) {
 				byte byte0 = 32;
 				if (!world.checkChunksExist(x - byte0, y - byte0, z - byte0, x + byte0, y + byte0, z + byte0)) {
-					//world.setBlock(x, y, z, null);
+					world.setBlock(x, y, z, 0);
 					for (; canFallBelow(world, x, y - 1, z) && y > 0; y--) {
 						if (y > 0) {
-							//world.setBlockMetadataWithNotify(x, y, z, BlockIDs.oreTC.blockID, 1);
-							world.setBlock(x, y, z, TCBlocksList.oreTC.block, 1, 3);
+							world.setBlockMetadataWithNotify(x, y, z, BlockIDs.oreTC.blockID, 1);
 						}
 					}
 				}
 				else {
-					EntityFallingBlock ent = new EntityFallingBlock(world, (double) x + 0.5D, (double) y + 0.5D, (double) z + 0.5D, TCBlocksList.oreTC.block, meta);
+					EntityFallingSand ent = new EntityFallingSand(world, (double) x + 0.5D, (double) y + 0.5D, (double) z + 0.5D, blockID, meta);
 					//onStartFalling(ent);
 					world.spawnEntityInWorld(ent);
 				}
@@ -120,43 +111,37 @@ public class BlockOreTC extends BlockSand
 	}
 
 	public static boolean canFallBelow(World world, int x, int y, int z) {
-		Block var4 = world.getBlock(x, y, z);
-		if (var4 == Blocks.air)
-		{
+		int var4 = world.getBlockId(x, y, z);
+		if (var4 == 0) {
 			return true;
 		}
-		else if (var4 == Blocks.fire)
-		{
+		else if (var4 == Block.fire.blockID) {
 			return true;
 		}
-		else
-		{
-			Material var5 = var4.getMaterial();
+		else {
+			Material var5 = Block.blocksList[var4].blockMaterial;
 			return var5 == Material.water ? true : var5 == Material.lava;
 		}
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List list)
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			list.add(new ItemStack(this, 1, i));
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(int par1, CreativeTabs tab, List subItems) {
+		for (int i = 0; i < 4; i++) {
+			subItems.add(new ItemStack(this, 1, i));
 		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister)
-	{
+	public void registerIcons(IconRegister iconRegister) {
 		texture1 = iconRegister.registerIcon(Info.modID.toLowerCase() + ":ores/ore_copper");
 		texture2 = iconRegister.registerIcon(Info.modID.toLowerCase() + ":ores/ore_oilsands");
 		texture3 = iconRegister.registerIcon(Info.modID.toLowerCase() + ":ores/ore_petroleum");
 		texture4 = iconRegister.registerIcon(Info.modID.toLowerCase() + ":ballast_test");
 	}
 
-	public static IIcon getTexture1()
-	{
+	public static Icon getTexture1() {
 		return texture1;
 	}
 }

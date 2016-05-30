@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import traincraft.common.Traincraft;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.GuiIDs;
 import traincraft.common.library.Info;
 import traincraft.common.tile.TileEntityDistil;
@@ -53,7 +53,7 @@ public class BlockDistil extends BlockContainer {
 
 	@Override
 	public int idDropped(int i, Random random, int j) {
-		return BlockIDs.TCBlocksList.blockID;
+		return BlockIDs.distilIdle.blockID;
 	}
 
 	@Override
@@ -165,10 +165,10 @@ public class BlockDistil extends BlockContainer {
 		TileEntity tileentity = world.getBlockTileEntity(i, j, k);
 		keepDistilInventory = true;
 		if (flag) {
-			world.setBlock(i, j, k, BlockIDs.TCBlocksList.blockID);
+			world.setBlock(i, j, k, BlockIDs.distilActive.blockID);
 		}
 		else {
-			world.setBlock(i, j, k, BlockIDs.TCBlocksList.blockID);
+			world.setBlock(i, j, k, BlockIDs.distilIdle.blockID);
 		}
 		keepDistilInventory = false;
 		world.setBlockMetadataWithNotify(i, j, k, l, 2);

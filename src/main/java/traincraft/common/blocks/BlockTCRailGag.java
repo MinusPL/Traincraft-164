@@ -14,7 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import traincraft.common.Traincraft;
 import traincraft.common.items.ItemTCRail.TrackTypes;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.Info;
 import traincraft.common.tile.TileTCRailGag;
 import cpw.mods.fml.relauncher.Side;
@@ -71,7 +71,7 @@ public class BlockTCRailGag extends Block {
 				world.destroyBlock(i, j, k, false);
 				world.removeBlockTileEntity(i, j, k);
 			}
-			if (!world.doesBlockHaveSolidTopSurface(i, j - 1, k) && world.getBlockId(i, j-1, k) != BlockIDs.TCBlocksList.blockID) {
+			if (!world.doesBlockHaveSolidTopSurface(i, j - 1, k) && world.getBlockId(i, j-1, k) != BlockIDs.bridgePillar.blockID) {
 				world.destroyBlock(i, j, k, false);
 				world.removeBlockTileEntity(i, j, k);
 			}

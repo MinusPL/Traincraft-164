@@ -65,7 +65,7 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-//import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy implements IGuiHandler {
@@ -78,8 +78,8 @@ public class CommonProxy implements IGuiHandler {
 	public void registerRenderInformation() {}
 
 	public void registerTileEntities() {
-		//TickRegistry.registerTickHandler(new ServerTickHandler(), Side.SERVER);
-		/*GameRegistry.registerTileEntity(TileCrafterTierI.class, "TileCrafterTierI");
+		TickRegistry.registerTickHandler(new ServerTickHandler(), Side.SERVER);
+		GameRegistry.registerTileEntity(TileCrafterTierI.class, "TileCrafterTierI");
 		GameRegistry.registerTileEntity(TileCrafterTierII.class, "TileCrafterTierII");
 		GameRegistry.registerTileEntity(TileCrafterTierIII.class, "TileCrafterTierIII");
 		GameRegistry.registerTileEntity(TileTrainWbench.class, "TileTrainWbench");
@@ -94,13 +94,12 @@ public class CommonProxy implements IGuiHandler {
 		GameRegistry.registerTileEntity(TileBook.class, "tileBook");
 		GameRegistry.registerTileEntity(TileTCRailGag.class, "tileTCRailGag");
 		GameRegistry.registerTileEntity(TileTCRail.class, "tileTCRail");
-		GameRegistry.registerTileEntity(TileBridgePillar.class, "tileTCBridgePillar");*/
+		GameRegistry.registerTileEntity(TileBridgePillar.class, "tileTCBridgePillar");
 	}
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		return null;
-		/*TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getBlockTileEntity(x, y, z);
 		EntityPlayer riddenByEntity = null;
 		Entity entity = null;
 		entity = player.ridingEntity;
@@ -143,7 +142,7 @@ public class CommonProxy implements IGuiHandler {
 			return riddenByEntity != null && entity != null ? new InventoryRotativeDigger(player.inventory, (EntityRotativeDigger) entity) : null;
 
 			/* Stationary entities while player is not riding. */
-		/*case (GuiIDs.FREIGHT):
+		case (GuiIDs.FREIGHT):
 			//System.out.println("Freight: " + ID + " | " + entity1.getEntityName() + " | " + x + ":" + y + ":" + z);
 			return entity1 != null && entity1 instanceof Freight ? new InventoryFreight(player.inventory, (Freight) entity1) : null;
 		case (GuiIDs.JUKEBOX):
@@ -156,19 +155,13 @@ public class CommonProxy implements IGuiHandler {
 			return entity1 != null && entity1 instanceof LiquidTank ? new InventoryLiquid(player.inventory, (LiquidTank) entity1) : null;
 		default:
 			return null;
-		}*/
+		}
 	}
 	public void registerChunkHandler(Traincraft instance){
-		//ForgeChunkManager.setForcedChunkLoadingCallback(instance, new locoChunkloadCallback());
-	}
-
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		// TODO Auto-generated method stub
-		return null;
+		ForgeChunkManager.setForcedChunkLoadingCallback(instance, new locoChunkloadCallback());
 	}
 	
-	/*public class locoChunkloadCallback implements ForgeChunkManager.OrderedLoadingCallback {
+	public class locoChunkloadCallback implements ForgeChunkManager.OrderedLoadingCallback {
 
 		@Override
 		public void ticketsLoaded(List<Ticket> tickets, World world) {
@@ -214,9 +207,9 @@ public class CommonProxy implements IGuiHandler {
 	public Minecraft getClientInstance() {
 		return FMLClientHandler.instance().getClient();
 	}
-	*/
+
 	public void getKeysFromProperties() {}
-	/*
+
 	public GuiScreen getCurrentScreen() {
 		return null;
 	}
@@ -262,5 +255,5 @@ public class CommonProxy implements IGuiHandler {
 	
 	public EntityPlayer getPlayer() {
 		return null;
-	}*/
+	}
 }

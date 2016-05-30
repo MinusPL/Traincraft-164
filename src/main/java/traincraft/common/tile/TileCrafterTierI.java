@@ -9,13 +9,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
-import traincraft.common.Traincraft;
+import net.minecraftforge.common.ForgeDirection;
 import traincraft.common.core.handlers.PacketHandler;
-import traincraft.common.core.handlers.packet.getTEPClient;
 import traincraft.common.core.interfaces.ITier;
 import traincraft.common.core.managers.TierRecipe;
 import traincraft.common.core.managers.TierRecipeManager;
@@ -92,23 +89,28 @@ public class TileCrafterTierI extends TileEntity implements IInventory, ITier {
 	}
 
 	@Override
+	public String getInvName() {
+		return "TierI";
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound nbtTag) {
 		super.readFromNBT(nbtTag);
 		facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
-		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		NBTTagList nbttaglist = nbtTag.getTagList("Items");
 		this.crafterInventory = new ItemStack[this.getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
+			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.tagAt(i);
 			byte byte0 = nbttagcompound1.getByte("Slot");
 			if (byte0 >= 0 && byte0 < crafterInventory.length) {
 				this.crafterInventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 			}
 		}
 
-		NBTTagList nbttaglist2 = nbtTag.getTagList("Known", Constants.NBT.TAG_COMPOUND);
+		NBTTagList nbttaglist2 = nbtTag.getTagList("Known");
 		for (int i = 0; i < nbttaglist2.tagCount(); i++) {
-			NBTTagCompound nbttagcompound2 = (NBTTagCompound) nbttaglist2.getCompoundTagAt(i);
+			NBTTagCompound nbttagcompound2 = (NBTTagCompound) nbttaglist2.tagAt(i);
 			byte byte1 = nbttagcompound2.getByte("Recipe");
 			if (byte1 >= 0) {
 				if (!listContains(knownRecipes, ItemStack.loadItemStackFromNBT(nbttagcompound2))) {
@@ -156,7 +158,7 @@ public class TileCrafterTierI extends TileEntity implements IInventory, ITier {
 	}
 
 	@Override
-	public void markDirty() {
+	public void onInventoryChanged() {
 		resultList.clear();
 		for (int i = 10; i < crafterInventory.length - 8; i++) {
 			crafterInventory[i] = null;
@@ -168,7 +170,7 @@ public class TileCrafterTierI extends TileEntity implements IInventory, ITier {
 			ItemStack stack = recipes.get(j).hasComponents(crafterInventory[0], crafterInventory[1], crafterInventory[2], crafterInventory[3], crafterInventory[4], crafterInventory[5], crafterInventory[6], crafterInventory[7], crafterInventory[8], crafterInventory[9]);
 			if (stack != null) {
 				resultList.add(stack);
-				crafterInventory[count + 10] = new ItemStack(stack.getItem(), 1, 0);
+				crafterInventory[count + 10] = new ItemStack(stack.itemID, 1, 0);
 				count++;
 			}
 		}
@@ -185,7 +187,7 @@ public class TileCrafterTierI extends TileEntity implements IInventory, ITier {
 		if (worldObj == null) {
 			return true;
 		}
-		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
@@ -202,18 +204,23 @@ public class TileCrafterTierI extends TileEntity implements IInventory, ITier {
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
-	{
-		return Traincraft.network.getPacketFrom(new getTEPClient(this));
+	public void openChest() {}
+
+	@Override
+	public void closeChest() {}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		return PacketHandler.getTEPClient(this);
 	}
 
-	public void handlePacketDataFromServer(int orientation) {
+	public void handlePacketDataFromServer(byte orientation) {
 		facing = ForgeDirection.getOrientation(orientation);
 	}
 
 	private boolean listContains(List<ItemStack> list, ItemStack stack) {
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getItem() == stack.getItem()) {
+			if (list.get(i).itemID == stack.itemID) {
 				return true;
 			}
 		}
@@ -251,37 +258,17 @@ public class TileCrafterTierI extends TileEntity implements IInventory, ITier {
 	}
 
 	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
+	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
 	
 	@Override
-	public void updateEntity()
-	{
+	public void updateEntity() {
 		super.updateEntity();
-	}
-
-	@Override
-	public String getInventoryName()
-	{
-		return "TierI";
-	}
-
-	@Override
-	public boolean hasCustomInventoryName()
-	{
-		return false;
-	}
-
-	@Override
-	public void openInventory()
-	{
-		
-	}
-
-	@Override
-	public void closeInventory()
-	{
-		
 	}
 }

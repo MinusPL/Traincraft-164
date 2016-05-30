@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import traincraft.common.core.managers.TierRecipe;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.ItemIDs;
 import traincraft.common.recipes.ShapedTrainRecipes;
 import traincraft.common.recipes.ShapelessTrainRecipe;
@@ -17,17 +17,17 @@ public class RecipeBookHandler {
 	public static String[] vanillaWorkTableRecipes = new String[20];
 
 	public RecipeBookHandler() {
-		vanillaWorkTableRecipes[0] = BlockIDs.TCBlocksList.block.getUnlocalizedName();
-		vanillaWorkTableRecipes[1] = BlockIDs.TCBlocksList.block.getUnlocalizedName();
-		vanillaWorkTableRecipes[2] = BlockIDs.TCBlocksList.block.getUnlocalizedName();
-		vanillaWorkTableRecipes[3] = BlockIDs.TCBlocksList.block.getUnlocalizedName();
-		vanillaWorkTableRecipes[4] = BlockIDs.TCBlocksList.block.getUnlocalizedName();
-		vanillaWorkTableRecipes[5] = BlockIDs.TCBlocksList.block.getUnlocalizedName();
+		vanillaWorkTableRecipes[0] = BlockIDs.assemblyTableI.block.getUnlocalizedName();
+		vanillaWorkTableRecipes[1] = BlockIDs.assemblyTableII.block.getUnlocalizedName();
+		vanillaWorkTableRecipes[2] = BlockIDs.assemblyTableIII.block.getUnlocalizedName();
+		vanillaWorkTableRecipes[3] = BlockIDs.distilIdle.block.getUnlocalizedName();
+		vanillaWorkTableRecipes[4] = BlockIDs.openFurnaceIdle.block.getUnlocalizedName();
+		vanillaWorkTableRecipes[5] = BlockIDs.trainWorkbench.block.getUnlocalizedName();
 		vanillaWorkTableRecipes[6] = ItemIDs.overalls.item.getUnlocalizedName();
 		vanillaWorkTableRecipes[7] = ItemIDs.jacket.item.getUnlocalizedName();
 		vanillaWorkTableRecipes[8] = ItemIDs.hat.item.getUnlocalizedName();
 		vanillaWorkTableRecipes[11] = ItemIDs.recipeBook.item.getUnlocalizedName();
-		vanillaWorkTableRecipes[12] = BlockIDs.TCBlocksList.block.getUnlocalizedName();
+		vanillaWorkTableRecipes[12] = BlockIDs.lantern.block.getUnlocalizedName();
 		vanillaWorkTableRecipes[14] = ItemIDs.pants_driver_paintable.item.getUnlocalizedName();
 		vanillaWorkTableRecipes[15] = ItemIDs.pants_ticketMan_paintable.item.getUnlocalizedName();
 		vanillaWorkTableRecipes[16] = ItemIDs.hat_driver_paintable.item.getUnlocalizedName();

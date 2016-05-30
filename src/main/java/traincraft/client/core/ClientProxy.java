@@ -67,7 +67,7 @@ import traincraft.common.entity.digger.EntityRotativeWheel;
 import traincraft.common.entity.rollingStock.EntityJukeBoxCart;
 import traincraft.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import traincraft.common.entity.zeppelin.EntityZeppelinTwoBalloons;
-import traincraft.common.library.TCBlocksList;
+import traincraft.common.library.BlockIDs;
 import traincraft.common.library.GuiIDs;
 import traincraft.common.library.Info;
 import traincraft.common.tile.TileBridgePillar;
@@ -85,26 +85,26 @@ import traincraft.common.tile.TileTrainWbench;
 import traincraft.common.tile.TileWaterWheel;
 import traincraft.common.tile.TileWindMill;
 import cpw.mods.fml.client.registry.ClientRegistry;
-//import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
-//import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
-	/*@Override
+	@Override
 	public void isHoliday() {
 		HolidayHelper helper = new HolidayHelper();
 		helper.setDaemon(true);
 		helper.start();
-	}*/
+	}
 	
 	@Override
 	public void registerKeyBindingHandler() {
-		//KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler());
+		KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler());
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class ClientProxy extends CommonProxy {
 		KeyBindingHelper.addIsRepeating(false);
 	}
 
-	/*@Override
+	@Override
 	public void registerRenderInformation() {
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 
@@ -150,9 +150,9 @@ public class ClientProxy extends CommonProxy {
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileBridgePillar.class, new RenderBridgePillar());
 		MinecraftForgeClient.registerItemRenderer(BlockIDs.bridgePillar.blockID, new ItemRenderBridgePillar());
-	}*/
+	}
 
-	/*@Override
+	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		EntityPlayer riddenByEntity = null;
@@ -210,16 +210,16 @@ public class ClientProxy extends CommonProxy {
 			return new GuiRecipeBook(player, player.getCurrentEquippedItem());
 		/*case (GuiIDs.RECIPE_BOOK2):
 			return te != null && te instanceof TileBook ? new GuiRecipeBook2(player, player.getCurrentEquippedItem()) : new GuiRecipeBook2(player, player.getCurrentEquippedItem());*/
-		/*case (GuiIDs.LANTERN):
+		case (GuiIDs.LANTERN):
 			return new GuiLantern(player, (TileLantern)te);
 		case (GuiIDs.JUKEBOX):
 			return entity1 != null ? new GuiJukebox(player,(EntityJukeBoxCart)entity1) : null;
 		default:
 			return null;
 		}
-	}*/
+	}
 	
-	/*@Override
+	@Override
 	public void getKeysFromProperties() {
 		File f = new File(Minecraft.getMinecraft().mcDataDir + "/options.txt");
 		if (f.exists() && f.isFile()) {
@@ -255,9 +255,9 @@ public class ClientProxy extends CommonProxy {
 		else {
 			Traincraft.tcLog.info("Options.txt file could not be found. Defaulting keys.");
 		}
-	}*/
+	}
 
-	/*@Override
+	@Override
 	public int addArmor(String armor) {
 		return RenderingRegistry.addNewArmourRendererPrefix(armor);
 	}
@@ -288,15 +288,15 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void getCape() {
-		//TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
+		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 	}
 	
 	@Override
 	public EntityPlayer getPlayer() {
 		return getMinecraft().thePlayer;
-	}*/
+	}
 	
-	/*@Override
+	@Override
 	public void doNEICheck(int id) {
 		if (Minecraft.getMinecraft().thePlayer != null ) {
             Iterator modsIT = Loader.instance().getModList().iterator();
@@ -309,5 +309,5 @@ public class ClientProxy extends CommonProxy {
                 }
             }
         }
-	}*/
+	}
 }
