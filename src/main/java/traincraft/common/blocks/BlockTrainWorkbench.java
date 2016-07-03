@@ -2,20 +2,22 @@ package traincraft.common.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import traincraft.common.Traincraft;
 import traincraft.common.library.GuiIDs;
 import traincraft.common.library.Info;
@@ -26,48 +28,41 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockTrainWorkbench extends BlockContainer {
 
-	private Icon textureTop;
-	private Icon textureBottom;
-	private Icon textureFront;
-	private Icon textureSide;
+	private IIcon textureTop;
+	private IIcon textureBottom;
+	private IIcon textureFront;
+	private IIcon textureSide;
 
-	public BlockTrainWorkbench(int i, int j) {
-		super(i, Material.wood);
+	public BlockTrainWorkbench(int j) {
+		super(Material.wood);
 		setCreativeTab(Traincraft.tcTab);
 	}
-
+	
 	@Override
-	public int idDropped(int i, Random random, int j) {
-		return this.blockID;
+	public Item getItemDropped(int i, Random random, int j)
+	{
+		return Item.getItemFromBlock(this);
 	}
 
 	@Override
-	public Icon getIcon(int i, int j) {
+	public IIcon getIcon(int i, int j) {
 		if (i == 1) {
 			return textureTop;
 		}
 		if (i == 0) {
 			return textureBottom;
 		}
-		if (i == 3) {
-			return textureFront;
-		}
-		else {
+		if (i != j) {
 			return textureSide;
 		}
-	}
-
-	@Override
-	public Icon getBlockTexture(IBlockAccess worldAccess, int i, int j, int k, int side) {
-		if (((TileTrainWbench) worldAccess.getBlockTileEntity(i, j, k)).getFacing() != null) {
-			side = TileHelper.getOrientationFromSide(((TileTrainWbench) worldAccess.getBlockTileEntity(i, j, k)).getFacing(), ForgeDirection.getOrientation(side)).ordinal();
+		else {
+			return textureFront;
 		}
-		return side == 1 ? textureTop : side == 0 ? textureBottom : side == 3 ? textureFront : textureSide;
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getBlockTileEntity(i, j, k);
+		TileEntity te = world.getTileEntity(i, j, k);
 		if (player.isSneaking()) {
 			return false;
 		}
@@ -80,9 +75,9 @@ public class BlockTrainWorkbench extends BlockContainer {
 	}
 
 	@Override
-	public void breakBlock(World world, int i, int j, int k, int par5, int par6) {
+	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		Random distilRand = new Random();
-		TileTrainWbench tilewb = (TileTrainWbench) world.getBlockTileEntity(i, j, k);
+		TileTrainWbench tilewb = (TileTrainWbench) world.getTileEntity(i, j, k);
 		if (tilewb != null) {
 			label0: for (int l = 0; l < tilewb.getSizeInventory(); l++) {
 				ItemStack itemstack = tilewb.getStackInSlot(l);
@@ -101,7 +96,7 @@ public class BlockTrainWorkbench extends BlockContainer {
 						i1 = itemstack.stackSize;
 					}
 					itemstack.stackSize -= i1;
-					EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2, new ItemStack(itemstack.itemID, i1, itemstack.getItemDamage()));
+					EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2, new ItemStack(itemstack.getItem(), i1, itemstack.getItemDamage()));
 					float f3 = 0.05F;
 					entityitem.motionX = (float) distilRand.nextGaussian() * f3;
 					entityitem.motionY = (float) distilRand.nextGaussian() * f3 + 0.2F;
@@ -121,22 +116,41 @@ public class BlockTrainWorkbench extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-		TileTrainWbench te = (TileTrainWbench) world.getBlockTileEntity(i, j, k);
+		TileTrainWbench te = (TileTrainWbench) world.getTileEntity(i, j, k);
 		if (te != null) {
 			int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
-			world.markBlockForUpdate(i, j, k);
+			//world.markBlockForUpdate(i, j, k);
+			
+			world.setBlockMetadataWithNotify(i, j, k, 3, 2);
+			if(dir == 0)
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 2, 2);
+			}
+			if(dir == 1)
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 5, 2);
+			}
+			if(dir == 2)
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 3, 2);
+			}
+			if(dir == 3)
+			{
+				world.setBlockMetadataWithNotify(i, j, k, 4, 2);
+			}
 		}
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createNewTileEntity(World world, int par1)
+	{
 		return new TileTrainWbench();
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerBlockIcons(IIconRegister iconRegister) {
 		textureTop = iconRegister.registerIcon(Info.modID.toLowerCase() + ":train_table_top");
 		textureBottom = iconRegister.registerIcon(Info.modID.toLowerCase() + ":train_table_bottom");
 		textureFront = iconRegister.registerIcon(Info.modID.toLowerCase() + ":train_table_front");

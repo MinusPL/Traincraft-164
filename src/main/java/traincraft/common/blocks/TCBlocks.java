@@ -32,11 +32,11 @@ public class TCBlocks {
 		//BlockIDs.assemblyTableII.block = new BlockAssemblyTableII(BlockIDs.assemblyTableII.blockID, 48, Material.rock).setHardness(3.5F).setStepSound(Block.soundWoodFootstep);
 		//BlockIDs.assemblyTableIII.block = new BlockAssemblyTableIII(BlockIDs.assemblyTableIII.blockID, 64, Material.rock).setHardness(3.5F).setStepSound(Block.soundWoodFootstep);
 
-		//BlockIDs.trainWorkbench.block = new BlockTrainWorkbench(BlockIDs.trainWorkbench.blockID, 16).setHardness(1.7F).setStepSound(Block.soundWoodFootstep);
+		TCBlocksList.trainWorkbench.block = new BlockTrainWorkbench(16).setHardness(1.7F).setStepSound(Block.soundTypeWood);
 		//BlockIDs.stopper.block = new BlockStopper(BlockIDs.stopper.blockID, 16).setHardness(1.7F).setStepSound(Block.soundWoodFootstep);
 
-		//BlockIDs.openFurnaceIdle.block = new BlockOpenHearthFurnace(BlockIDs.openFurnaceIdle.blockID, 20, false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
-		//BlockIDs.openFurnaceActive.block = new BlockOpenHearthFurnace(BlockIDs.openFurnaceActive.blockID, 20, true).setHardness(3.5F).setStepSound(Block.soundTypeStone);
+		TCBlocksList.openFurnaceIdle.block = new BlockOpenHearthFurnace(20, false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
+		TCBlocksList.openFurnaceActive.block = new BlockOpenHearthFurnace(20, true).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 		TCBlocksList.oreTC.block = new BlockOreTC().setHardness(3.0F).setResistance(5F).setStepSound(Block.soundTypeStone);
 
 		//BlockIDs.lantern.block = new BlockLantern(BlockIDs.lantern.blockID).setHardness(1.7F).setStepSound(Block.soundMetalFootstep).setLightValue(0.98F);
@@ -73,8 +73,8 @@ public class TCBlocks {
 	}
 
 	public static void setHarvestLevels() {
-		/*MinecraftForge.setBlockHarvestLevel(BlockIDs.trainWorkbench.block, "axe", 0);
-		MinecraftForge.setBlockHarvestLevel(BlockIDs.assemblyTableI.block, "axe", 0);
+		//MinecraftForge.setBlockHarvestLevel(TCBlocksList.trainWorkbench.block, "axe", 0);
+		/*MinecraftForge.setBlockHarvestLevel(BlockIDs.assemblyTableI.block, "axe", 0);
 		MinecraftForge.setBlockHarvestLevel(BlockIDs.assemblyTableII.block, "axe", 0);
 		MinecraftForge.setBlockHarvestLevel(BlockIDs.assemblyTableIII.block, "axe", 0);
 		MinecraftForge.setBlockHarvestLevel(BlockIDs.waterWheel.block, "axe", 0);

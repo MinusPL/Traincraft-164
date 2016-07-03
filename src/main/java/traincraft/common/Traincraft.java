@@ -96,7 +96,7 @@ public class Traincraft {
 		//proxy.registerKeyBindingHandler();
 
 		/* Tile Entities */
-		//proxy.registerTileEntities();
+		proxy.registerTileEntities();
 
 		/* Rendering registration */
 		/*proxy.registerRenderInformation();
@@ -124,9 +124,9 @@ public class Traincraft {
 		TCItems.init();
 		
 		/* Register entities */
-		/*EntityHandler.init();
+		//EntityHandler.init();
 
-		AchievementHandler.load();
+		/*AchievementHandler.load();
 		AchievementPage.registerAchievementPage(AchievementHandler.tmPage);
 		
 		/* Network configuration */
@@ -142,14 +142,14 @@ public class Traincraft {
 		//proxy.getCape();
 		
 		/* GUI handler initiation */
-		//NetworkRegistry.instance().registerGuiHandler(instance, proxy);
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 		//GameRegistry.registerCraftingHandler(new CraftingHandler());
 
 		/* Ore dictionary */
 		OreHandler.registerOres();
 
 		/* Recipes */
-		//RecipeHandler.initBlockRecipes();
+		RecipeHandler.initBlockRecipes();
 		RecipeHandler.initItemRecipes();
 		//AssemblyTableRecipes.recipes();
 

@@ -27,13 +27,13 @@ public enum TCBlocksList {
 	
 	//book(true, ItemBlockBook.class),
 
-	//trainWorkbench(false, null),
+	trainWorkbench(false, null),
 
 	//stopper(false, null),
 
-	//openFurnaceIdle(false, null),
-	//openFurnaceActive(false, null),
-	oreTC(true, ItemBlockOreTC.class, "ore");
+	openFurnaceIdle(false, null),
+	openFurnaceActive(false, null),
+	oreTC(true, ItemBlockOreTC.class);
 	//lantern(false, null),
 	//waterWheel(true, ItemBlockGeneratorWaterWheel.class),
 	//windMill(true, ItemBlockGeneratorWindMill.class),
@@ -50,11 +50,11 @@ public enum TCBlocksList {
 	public Block block;
 	public boolean hasItemBlock;
 	public Class itemBlockClass;
-	public String block_name;
+	//public String block_name;
 
-	TCBlocksList(boolean hasItemBlock, Class<? extends ItemBlock> itemBlockClass, String name) {
+	TCBlocksList(boolean hasItemBlock, Class<? extends ItemBlock> itemBlockClass) {
 		this.hasItemBlock = hasItemBlock;
 		this.itemBlockClass = itemBlockClass;
-		this.block_name = name;
+		//this.block_name = name;
 	}
 }

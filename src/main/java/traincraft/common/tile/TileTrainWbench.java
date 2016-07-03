@@ -12,7 +12,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -150,13 +152,15 @@ public class TileTrainWbench extends TileEntity implements IInventory {
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return Traincraft.network.getPacketFrom(new getTEPClient(this));
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, xCoord, 1, tag);		
 	}
-
-	public void handlePacketDataFromServer(int orientation)
-	{
-		facing = ForgeDirection.getOrientation(orientation);
-	}
+	
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+        readFromNBT(packet.func_148857_g());
+    }	
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

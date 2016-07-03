@@ -47,7 +47,7 @@ public class OpenHearthFurnaceRecipes {
 	}
 
 	public ItemStack getSmeltingResultFromItem1(Item i) {
-		return (ItemStack) smeltingListResult1.get(new ItemStack(i));
+		return (ItemStack) smeltingListResult1.get(i);
 	}
 
 	public int getCookTime(ItemStack i, ItemStack j) {

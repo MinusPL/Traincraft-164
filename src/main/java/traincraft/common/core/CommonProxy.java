@@ -81,11 +81,11 @@ public class CommonProxy implements IGuiHandler {
 		//TickRegistry.registerTickHandler(new ServerTickHandler(), Side.SERVER);
 		/*GameRegistry.registerTileEntity(TileCrafterTierI.class, "TileCrafterTierI");
 		GameRegistry.registerTileEntity(TileCrafterTierII.class, "TileCrafterTierII");
-		GameRegistry.registerTileEntity(TileCrafterTierIII.class, "TileCrafterTierIII");
+		GameRegistry.registerTileEntity(TileCrafterTierIII.class, "TileCrafterTierIII");*/
 		GameRegistry.registerTileEntity(TileTrainWbench.class, "TileTrainWbench");
-		GameRegistry.registerTileEntity(TileEntityDistil.class, "Tile Distil");
+		//GameRegistry.registerTileEntity(TileEntityDistil.class, "Tile Distil");
 		GameRegistry.registerTileEntity(TileEntityOpenHearthFurnace.class, "Tile OpenHearthFurnace");
-		GameRegistry.registerTileEntity(TileStopper.class, "TileStopper");
+		/*GameRegistry.registerTileEntity(TileStopper.class, "TileStopper");
 		GameRegistry.registerTileEntity(TileSignal.class, "TileSignal");
 		GameRegistry.registerTileEntity(TileLantern.class, "tileLantern");
 		GameRegistry.registerTileEntity(TileWaterWheel.class, "tileWaterWheel");
@@ -99,8 +99,8 @@ public class CommonProxy implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		return null;
-		/*TileEntity te = world.getBlockTileEntity(x, y, z);
+		//return null;
+		TileEntity te = world.getTileEntity(x, y, z);
 		EntityPlayer riddenByEntity = null;
 		Entity entity = null;
 		entity = player.ridingEntity;
@@ -109,13 +109,13 @@ public class CommonProxy implements IGuiHandler {
 			riddenByEntity = (EntityPlayer) entity.riddenByEntity;
 		}
 
-		Entity entity1 = null;
+		/*Entity entity1 = null;
 		if (y == -1) {
 			entity1 = getEntity(world, x);
-		}
+		}*/
 
 		switch (ID) {
-		case (GuiIDs.CRAFTER_TIER_I):
+		/*case (GuiIDs.CRAFTER_TIER_I):
 			return te != null && te instanceof TileCrafterTierI ? new ContainerTier(player.inventory, (TileCrafterTierI) te) : null;
 		case (GuiIDs.CRAFTER_TIER_II):
 			return te != null && te instanceof TileCrafterTierII ? new ContainerTier(player.inventory, (TileCrafterTierII) te) : null;
@@ -125,11 +125,11 @@ public class CommonProxy implements IGuiHandler {
 			return te != null && te instanceof TileEntityDistil ? new ContainerDistil(player.inventory, (TileEntityDistil) te) : null;
 		case (GuiIDs.GENERATOR_DIESEL):
 			return te != null && te instanceof TileGeneratorDiesel ? new ContainerGeneratorDiesel(player.inventory, (TileGeneratorDiesel) te) : null;
-		case (GuiIDs.OPEN_HEARTH_FURNACE):
+		*/case (GuiIDs.OPEN_HEARTH_FURNACE):
 			return te != null && te instanceof TileEntityOpenHearthFurnace ? new ContainerOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
 		case (GuiIDs.TRAIN_WORKBENCH):
 			return te != null && te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
-		case (GuiIDs.LOCO):
+		/*case (GuiIDs.LOCO):
 			return riddenByEntity != null && entity != null ? new InventoryLoco(riddenByEntity.inventory, (EntityRollingStock) entity) : null;
 		case (GuiIDs.FORNEY):
 			return riddenByEntity != null && entity != null ? new InventoryForney(player.inventory, (EntityRollingStock) entity) : null;
@@ -154,17 +154,17 @@ public class CommonProxy implements IGuiHandler {
 			return entity1 != null && entity1 instanceof EntityTracksBuilder ? new InventoryBuilder(player.inventory, (EntityTracksBuilder) entity1) : null;
 		case (GuiIDs.LIQUID):
 			return entity1 != null && entity1 instanceof LiquidTank ? new InventoryLiquid(player.inventory, (LiquidTank) entity1) : null;
-		default:
+		*/default:
 			return null;
-		}*/
+		}
 	}
 	public void registerChunkHandler(Traincraft instance){
 		//ForgeChunkManager.setForcedChunkLoadingCallback(instance, new locoChunkloadCallback());
 	}
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		// TODO Auto-generated method stub
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	{
 		return null;
 	}
 	
@@ -193,11 +193,6 @@ public class CommonProxy implements IGuiHandler {
 			}
 			return validTickets;
 		}
-	}
-	
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		return null;
 	}
 
 	public static Entity getEntity(World world, int entityId) {

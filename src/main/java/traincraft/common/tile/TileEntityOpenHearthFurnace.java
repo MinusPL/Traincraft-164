@@ -12,7 +12,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -123,9 +125,9 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTag) {
 		super.writeToNBT(nbtTag);
-		nbtTag.setByte("Orientation", (byte) facing.ordinal());
-		nbtTag.setShort("BurnTime", (short) furnaceBurnTime);
-		nbtTag.setShort("CookTime", (short) furnaceCookTime);
+		nbtTag.setInteger("Orientation", facing.ordinal());
+		nbtTag.setInteger("BurnTime", furnaceBurnTime);
+		nbtTag.setInteger("CookTime", furnaceCookTime);
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < this.furnaceItemStacks.length; i++) {
 			if (this.furnaceItemStacks[i] != null) {
@@ -269,6 +271,8 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 			furnaceItemStacks[3].stackSize += itemstack.stackSize;
 
 		}
+		
+		
 		if (furnaceItemStacks[0].getItem().hasContainerItem()) {
 			furnaceItemStacks[0] = new ItemStack(furnaceItemStacks[0].getItem().getContainerItem());
 		}
@@ -315,11 +319,11 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 		{
 			return 2500;
 		}
-		else if (var1 == Item.getItemFromBlock(Blocks.oreTC.block) && it.getItemDamage() == 1)
+		else if (var1 == Item.getItemFromBlock(TCBlocksList.oreTC.block) && it.getItemDamage() == 1)
 		{
 			return 2500;
 		}
-		else if (var1 == Item.getItemFromBlock(Blocks.oreTC.block) && it.getItemDamage() == 2)
+		else if (var1 == Item.getItemFromBlock(TCBlocksList.oreTC.block) && it.getItemDamage() == 2)
 		{
 			return 2500;
 		}
@@ -371,14 +375,22 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 	public void closeInventory() {}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		return Traincraft.network.getPacketFrom(new getTEPClient(this));
+	public Packet getDescriptionPacket()
+	{
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, xCoord, 1, tag);		
 	}
+	
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+        readFromNBT(packet.func_148857_g());
+    }	
 
-	public void handlePacketDataFromServer(byte orientation, short cookTime, short burnTime) {
+	public void handlePacketDataFromServer(int orientation, int cookTime, int burnTime) {
 		facing = ForgeDirection.getOrientation(orientation);
-		furnaceBurnTime = (int) burnTime;
-		furnaceCookTime = (int) cookTime;
+		furnaceBurnTime = burnTime;
+		furnaceCookTime = cookTime;
 	}
 
 	@Override

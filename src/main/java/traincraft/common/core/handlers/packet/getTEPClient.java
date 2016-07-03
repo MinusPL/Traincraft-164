@@ -233,24 +233,24 @@ public class getTEPClient implements IMessage
 		public IMessage onMessage(getTEPClient message, MessageContext ctx)
 		{
 			int packetIndex = message.par1;
+			World world;
+			switch(ctx.side)
+			{
+				case CLIENT:
+				{
+					world = Minecraft.getMinecraft().thePlayer.worldObj;
+				}
+				case SERVER:
+				{
+					world = ctx.getServerHandler().playerEntity.worldObj;
+				}
+				default:
+				{
+					assert false : "Invalid side in TestMsgHandler: " + ctx.side;
+				}
+			}
 			if(packetIndex == 0)
 			{
-				World world;
-				switch(ctx.side)
-				{
-					case CLIENT:
-					{
-						world = Minecraft.getMinecraft().thePlayer.worldObj;
-					}
-					case SERVER:
-					{
-						world = ctx.getServerHandler().playerEntity.worldObj;
-					}
-					default:
-					{
-						assert false : "Invalid side in TestMsgHandler: " + ctx.side;
-					}
-				}
 				if (packetIndex == 0)
 				{
 					int x = message.x;
@@ -332,7 +332,17 @@ public class getTEPClient implements IMessage
 			}
 			else if(packetIndex == 1)
 			{
-				
+				int x = message.x;
+				int y = message.y;
+				int z = message.z;
+				TileEntity te = world.getTileEntity(x, y, z);
+				if(te instanceof TileEntityOpenHearthFurnace)
+				{
+					int orientation = message.facing;
+					int cookTime = message.cook_time;
+					int burnTime = message.burn_time;
+					((TileEntityOpenHearthFurnace) te).handlePacketDataFromServer(orientation, cookTime, burnTime);					
+				}
 			}
 			else if(packetIndex == 1)
 			{

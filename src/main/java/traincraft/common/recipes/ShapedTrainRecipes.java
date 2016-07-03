@@ -8,6 +8,7 @@
 package traincraft.common.recipes;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -31,11 +32,11 @@ public class ShapedTrainRecipes implements ITCRecipe {
 	private ItemStack recipeOutput;
 
 	/** Is the itemID of the output item that you get when craft the recipe. */
-	public final int recipeOutputItemID;
+	public final Item recipeOutputItem;
 	private boolean field_92049_f = false;
 
 	public ShapedTrainRecipes(int par1, int par2, ItemStack[] stacks, ItemStack stack) {
-		recipeOutputItemID = stack.itemID;
+		recipeOutputItem = stack.getItem();
 		recipeWidth = par1;
 		recipeHeight = par2;
 		recipeItems = stacks;
@@ -82,7 +83,7 @@ public class ShapedTrainRecipes implements ITCRecipe {
 					slots[i] = false;
 					continue;
 				}
-				if (var9.itemID != var10.itemID) {
+				if (var9.getItem() != var10.getItem()) {
 					//System.out.println(var9.getDisplayName() + " : " + var10.getDisplayName());
 					slots[i] = false;
 					continue;

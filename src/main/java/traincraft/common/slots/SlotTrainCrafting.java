@@ -13,6 +13,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class SlotTrainCrafting extends Slot {
@@ -52,15 +53,26 @@ public class SlotTrainCrafting extends Slot {
 		return super.decrStackSize(par1);
 	}
 	@Override
-	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack) {
-		GameRegistry.onItemCrafted(par1EntityPlayer, par2ItemStack, craftMatrix);
+	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
+	{
+		this.onCrafting(par2ItemStack);
+		for(int i = 0; i < this.craftMatrix.getSizeInventory(); ++i)
+		{
+			ItemStack itemstack = this.craftMatrix.getStackInSlot(i);
+			if(itemstack != null)
+			{
+				this.craftMatrix.decrStackSize(i, 1);
+			}
+		}
+		
+		/*GameRegistry.onItemCrafted(par1EntityPlayer, par2ItemStack, craftMatrix);
 		this.onCrafting(par2ItemStack);
 		for (int var3 = 0; var3 < this.craftMatrix.getSizeInventory(); ++var3) {
 			ItemStack var4 = this.craftMatrix.getStackInSlot(var3);
 			if (var4 != null) {
 				this.craftMatrix.decrStackSize(var3, 1);
 				if (var4.getItem().hasContainerItem()) {
-					ItemStack var5 = var4.getItem().getContainerItemStack(var4);
+					ItemStack var5 = var4.getItem().getContainerItem(var4);
 					if (var5.isItemStackDamageable() && var5.getItemDamage() > var5.getMaxDamage()) {
 						MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(thePlayer, var5));
 						var5 = null;
@@ -75,11 +87,12 @@ public class SlotTrainCrafting extends Slot {
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
-	public void onSlotChanged() {
-		inventory.onInventoryChanged();
+	public void onSlotChanged()
+	{
+		this.inventory.markDirty();
 	}
 }
